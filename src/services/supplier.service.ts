@@ -11,6 +11,7 @@ import {
 import {
   Suppliers,
   USERNAME,
+  PRODUCT_ATTRIBUTES,
   USER_ATTRIBUTES,
   MODEL_NAME,
   FindAllParams,
@@ -26,16 +27,15 @@ const { suppliers } = models;
 export const create = async (data: Suppliers, whoIsAccess: USERNAME) => {
   try {
     if (!data.name) throw new BadRequest(LANG.error.wrong_parameter);
-
     logger.info(LANG.logger.creating(MODEL_NAME.supplier));
 
     const image = data.image
       ? base64ToImage(
           data.image,
           data.imageName || LANG.no_name,
-          LANG.folderName.supplier
+          LANG.folderName.category
         )
-      : LANG.empty; 
+      : LANG.empty;
 
     const dateParameter = dateLocal();
     const createdBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
@@ -206,7 +206,7 @@ export const destroy = async (id: ID) => {
   try {
     if (!id) throw new BadRequest(LANG.error.wrong_parameter);
 
-    logger.info(LANG.logger.deleting(id, MODEL_NAME.product));
+    logger.info(LANG.logger.deleting(id, MODEL_NAME.category));
 
     const result = await suppliers.destroy({ where: { id } });
 

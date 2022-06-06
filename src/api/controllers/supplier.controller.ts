@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
-import * as Category from '@services/category.service';
-import { Categories } from '@interfaces/index';
+import * as Supplier from '@services/supplier.service';
+import { Suppliers } from '@interfaces/index';
 import { LANG } from '@utils/index';
 import { FindAllParams, ARCHIVING_STATUS } from '@interfaces/index';
 
@@ -9,10 +9,10 @@ export const Create = async (
   res: Response,
   next: NextFunction
 ) => {
-  const data = req.body as Categories;
+  const data = req.body as Suppliers;
   const whoIsAccess = req.headers.userName as string;
 
-  const result = await Category.create(data, whoIsAccess);
+  const result = await Supplier.create(data, whoIsAccess);
 
   res.status(200).json({ message: LANG.success, data: result });
 };
@@ -24,7 +24,7 @@ export const FindAll = async (
 ) => {
   const params: FindAllParams = req.body;
 
-  const result = await Category.findAll(params);
+  const result = await Supplier.findAll(params);
 
   res.status(200).json({ message: LANG.success, data: result });
 };
@@ -36,7 +36,7 @@ export const FindOne = async (
 ) => {
   const { id } = req.params;
 
-  const result = await Category.findOne(id);
+  const result = await Supplier.findOne(id);
 
   res.status(200).json({ message: LANG.success, data: result });
 };
@@ -46,11 +46,11 @@ export const Update = async (
   res: Response,
   next: NextFunction
 ) => {
-  const data = req.body as Categories;
+  const data = req.body as Suppliers;
   const { id } = req.params;
   const whoIsAccess = req.headers.userName as string;
 
-  const result = await Category.update(data, whoIsAccess, id);
+  const result = await Supplier.update(data, whoIsAccess, id);
 
   res.status(200).json({ message: LANG.success, data: result });
 };
@@ -63,7 +63,7 @@ export const Archived = async (
   const { id } = req.params;
   const whoIsAccess = req.headers.userName as string;
 
-  const result = await Category.archivedAndUnarchived(
+  const result = await Supplier.archivedAndUnarchived(
     whoIsAccess,
     id,
     ARCHIVING_STATUS.archived
@@ -80,7 +80,7 @@ export const Unarchived = async (
   const { id } = req.params;
   const whoIsAccess = req.headers.userName as string;
 
-  const result = await Category.archivedAndUnarchived(
+  const result = await Supplier.archivedAndUnarchived(
     whoIsAccess,
     id,
     ARCHIVING_STATUS.unarchived
@@ -96,7 +96,7 @@ export const Destroy = async (
 ) => {
   const { id } = req.params;
 
-  const result = await Category.destroy(id);
+  const result = await Supplier.destroy(id);
 
   res.status(200).json({ message: LANG.success, data: LANG.deleted(result) });
 };

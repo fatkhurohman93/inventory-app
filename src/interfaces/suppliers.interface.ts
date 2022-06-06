@@ -6,6 +6,7 @@ export interface Suppliers extends Common {
   description?: string;
   code: string;
   image?: string;
+  imageName?: string;
   phone: string;
   whatsapp: string;
   email: string;

@@ -8,7 +8,7 @@ export enum ROUTES {
   user = '/user',
   product = '/product',
   category = '/category',
-  supplier = '/supplier ',
+  supplier = '/supplier',
 }
 
 export enum ROUTES_AUTH {

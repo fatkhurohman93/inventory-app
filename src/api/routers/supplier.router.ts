@@ -7,9 +7,9 @@ import {
   Archived,
   Unarchived,
   Destroy,
-} from '@controllers/category.controller';
+} from '@controllers/supplier.controller';
 import { catchAsync } from '@utils/index';
-import { ROUTES, ROUTES_CATEGORY } from '@interfaces/index';
+import { ROUTES, ROUTES_SUPPLIER } from '@interfaces/index';
 import {
   verifyToken,
   isRoot,
@@ -20,26 +20,26 @@ import {
 const router = Router();
 
 export default (app: Router) => {
-  app.use(ROUTES.category, router);
+  app.use(ROUTES.supplier, router);
   router
-    .route(ROUTES_CATEGORY.create)
+    .route(ROUTES_SUPPLIER.create)
     .post(verifyToken, isAdmin, catchAsync(Create));
   router
-    .route(ROUTES_CATEGORY.findAll)
+    .route(ROUTES_SUPPLIER.findAll)
     .post(verifyToken, isUser, catchAsync(FindAll));
   router
-    .route(ROUTES_CATEGORY.findOne)
+    .route(ROUTES_SUPPLIER.findOne)
     .post(verifyToken, isUser, catchAsync(FindOne));
   router
-    .route(ROUTES_CATEGORY.update)
+    .route(ROUTES_SUPPLIER.update)
     .put(verifyToken, isAdmin, catchAsync(Update));
   router
-    .route(ROUTES_CATEGORY.archived)
+    .route(ROUTES_SUPPLIER.archived)
     .put(verifyToken, isAdmin, catchAsync(Archived));
   router
-    .route(ROUTES_CATEGORY.unarchived)
+    .route(ROUTES_SUPPLIER.unarchived)
     .put(verifyToken, isAdmin, catchAsync(Unarchived));
   router
-    .route(ROUTES_CATEGORY.destroy)
+    .route(ROUTES_SUPPLIER.destroy)
     .delete(verifyToken, isRoot, catchAsync(Destroy));
 };

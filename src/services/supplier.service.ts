@@ -9,25 +9,25 @@ import {
   catchError,
 } from '@utils/index';
 import {
-  Categories,
-  FindAllParams,
+  Suppliers,
   USERNAME,
+  PRODUCT_ATTRIBUTES,
   USER_ATTRIBUTES,
-  ID,
   MODEL_NAME,
+  FindAllParams,
+  ID,
   ARCHIVING_STATUS,
 } from '@interfaces/index';
 import { LANG, dateLocal } from '@utils/index';
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
-const { categories } = models;
+const { suppliers } = models;
 
-export const create = async (data: Categories, whoIsAccess: USERNAME) => {
+export const create = async (data: Suppliers, whoIsAccess: USERNAME) => {
   try {
     if (!data.name) throw new BadRequest(LANG.error.wrong_parameter);
-
-    logger.info(LANG.logger.creating(MODEL_NAME.category));
+    logger.info(LANG.logger.creating(MODEL_NAME.supplier));
 
     const image = data.image
       ? base64ToImage(
@@ -40,7 +40,7 @@ export const create = async (data: Categories, whoIsAccess: USERNAME) => {
     const dateParameter = dateLocal();
     const createdBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
 
-    const result = await categories.create({
+    const result = await suppliers.create({
       ...data,
       ...dateParameter,
       image,
@@ -48,7 +48,7 @@ export const create = async (data: Categories, whoIsAccess: USERNAME) => {
       archived: false,
     });
 
-    logger.info(LANG.logger.created(MODEL_NAME.category, result.toJSON().id));
+    logger.info(LANG.logger.created(MODEL_NAME.supplier, result.toJSON().id));
 
     return result;
   } catch (err) {
@@ -61,9 +61,9 @@ export const findAll = async (params: FindAllParams) => {
     const { page, size, name, archived } = params;
     const { limit, offset } = getPagination(page, size);
 
-    logger.info(LANG.logger.fetching_all(MODEL_NAME.category));
+    logger.info(LANG.logger.fetching_all(MODEL_NAME.supplier));
 
-    const result = await categories.findAndCountAll({
+    const result = await suppliers.findAndCountAll({
       where: and(
         filterByName(name),
         archived !== undefined ? { archived } : {}
@@ -77,7 +77,7 @@ export const findAll = async (params: FindAllParams) => {
     logger.info(
       LANG.logger.fetching_all_success(
         finalResult.totalItems,
-        MODEL_NAME.category
+        MODEL_NAME.supplier
       )
     );
 
@@ -93,15 +93,15 @@ export const findOne = async (id: ID) => {
       throw new BadRequest(LANG.error.wrong_id);
     }
 
-    logger.info(LANG.logger.fetching_one(id, MODEL_NAME.category));
+    logger.info(LANG.logger.fetching_one(id, MODEL_NAME.supplier));
 
-    const result = await categories.findOne({ where: { id } });
+    const result = await suppliers.findOne({ where: { id } });
 
     if (!result) {
-      throw new BadRequest(LANG.error.model_not_found(MODEL_NAME.category));
+      throw new BadRequest(LANG.error.model_not_found(MODEL_NAME.supplier));
     }
 
-    logger.info(LANG.logger.fetching_one_success(id, MODEL_NAME.category));
+    logger.info(LANG.logger.fetching_one_success(id, MODEL_NAME.supplier));
 
     return result;
   } catch (err) {
@@ -110,7 +110,7 @@ export const findOne = async (id: ID) => {
 };
 
 export const update = async (
-  data: Categories,
+  data: Suppliers,
   whoIsAccess: USERNAME,
   id: ID
 ) => {
@@ -119,7 +119,7 @@ export const update = async (
       throw new BadRequest(LANG.error.wrong_id);
     }
 
-    logger.info(LANG.logger.updating(id, MODEL_NAME.category));
+    logger.info(LANG.logger.updating(id, MODEL_NAME.supplier));
 
     const { lastUpdatedTime } = dateLocal();
     const lastUpdatedBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
@@ -132,7 +132,7 @@ export const update = async (
         )
       : LANG.empty;
 
-    const result = await categories.update(
+    const result = await suppliers.update(
       { ...data, image, lastUpdatedBy, lastUpdatedTime },
       { where: { id } }
     );
@@ -160,11 +160,11 @@ export const archivedAndUnarchived = async (
 
     logger.info(
       ARCHIVING_STATUS.archived
-        ? LANG.logger.archiving(id, MODEL_NAME.category)
-        : LANG.logger.unarchiving(id, MODEL_NAME.category)
+        ? LANG.logger.archiving(id, MODEL_NAME.supplier)
+        : LANG.logger.unarchiving(id, MODEL_NAME.supplier)
     );
 
-    const result = await categories.update(
+    const result = await suppliers.update(
       {
         archived: status === ARCHIVING_STATUS.archived,
         lastUpdatedTime,
@@ -181,11 +181,11 @@ export const archivedAndUnarchived = async (
 
     const ARCHIVED_SUCCESS = LANG.logger.archiving_success(
       id,
-      MODEL_NAME.category
+      MODEL_NAME.supplier
     );
     const UNARCHIVED_SUCCESS = LANG.logger.unarchiving_success(
       id,
-      MODEL_NAME.category
+      MODEL_NAME.supplier
     );
 
     if (status === ARCHIVING_STATUS.archived) {
@@ -208,7 +208,7 @@ export const destroy = async (id: ID) => {
 
     logger.info(LANG.logger.deleting(id, MODEL_NAME.category));
 
-    const result = await categories.destroy({ where: { id } });
+    const result = await suppliers.destroy({ where: { id } });
 
     if (!result) {
       throw new BadRequest(LANG.error.no_data_deleted);

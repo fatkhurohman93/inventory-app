@@ -1,6 +1,6 @@
 export enum MODEL_NAME {
-  product = 'product',
-  category = 'category',
-  supplier = 'supplier',
-  user = 'user',
+  product = 'Product',
+  category = 'Category',
+  supplier = 'Supplier',
+  user = 'User',
 }

@@ -30,7 +30,7 @@ export const findAll = async (params: FindAllParams) => {
     const { page, size, name, archived } = params;
     const { limit, offset } = getPagination(page, size);
 
-    logger.info(LANG.logger.fetching_users);
+    logger.info(LANG.logger.fetching_all(MODEL_NAME.user));
 
     const result = await users.findAndCountAll({
       where: and(
@@ -44,7 +44,9 @@ export const findAll = async (params: FindAllParams) => {
 
     const finalResult = getPagingData(result, limit, page);
 
-    logger.info(LANG.logger.result_get_users(finalResult.totalItems));
+    logger.info(
+      LANG.logger.fetching_all_success(finalResult.totalItems, MODEL_NAME.user)
+    );
 
     return finalResult;
   } catch (err) {
@@ -58,7 +60,7 @@ export const findOne = async (userName: USERNAME) => {
       throw new BadRequest(LANG.error.wrong_username);
     }
 
-    logger.info(LANG.logger.fetching_user(userName));
+    logger.info(LANG.logger.fetching_one(userName, MODEL_NAME.user));
 
     const result = await users.findOne({
       where: { userName },
@@ -66,10 +68,10 @@ export const findOne = async (userName: USERNAME) => {
     });
 
     if (!result) {
-      throw new BadRequest(LANG.error.username_not_found);
+      throw new BadRequest(LANG.error.model_not_found(MODEL_NAME.user));
     }
 
-    logger.info(LANG.logger.fetch_user_success(userName));
+    logger.info(LANG.logger.fetching_one_success(userName, MODEL_NAME.user));
 
     return result;
   } catch (err) {
@@ -90,7 +92,7 @@ export const update = async (
     const { lastUpdatedTime } = dateLocal();
     const lastUpdatedBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
 
-    logger.info(LANG.logger.updating_user(userName));
+    logger.info(LANG.logger.updating(userName, MODEL_NAME.user));
 
     const { name, email, flagRoles } = data;
 
@@ -132,7 +134,7 @@ export const checkPassword = async (password: PASSWORD, userName: USERNAME) => {
     });
 
     if (!userResult) {
-      throw new BadRequest(LANG.error.username_not_found);
+      throw new BadRequest(LANG.error.model_not_found(MODEL_NAME.user));
     }
 
     const userResultToJSON = userResult.toJSON();
@@ -239,18 +241,16 @@ export const archivedAndUnarchived = async (
   }
 };
 
-export const destroy = async (userName: string) => {
+export const destroy = async (userName: USERNAME) => {
   try {
-    if (!userName) {
-      throw new BadRequest(LANG.error.wrong_username);
-    }
+    if (!userName) throw new BadRequest(LANG.error.wrong_username);
 
-    logger.info(LANG.logger.deleting_user(userName));
+    logger.info(LANG.logger.deleting(userName, MODEL_NAME.user));
 
     const result = await users.destroy({ where: { userName } });
 
     if (!result) {
-      throw new BadRequest(LANG.error.no_data_updated);
+      throw new BadRequest(LANG.error.no_data_deleted);
     }
 
     logger.info(LANG.deleted(result));

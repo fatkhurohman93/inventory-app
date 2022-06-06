@@ -54,6 +54,7 @@ export const en = {
       return `Require ${ROLE}`;
     },
     failed_to_archived: 'Failed to archived!',
+    failed_to_unarchived: 'Failed to unarchived!',
   },
   logger: {
     creating_user: 'Creating user...',
@@ -84,6 +85,12 @@ export const en = {
     },
     archiving_success: (id: string | number, tableName: string) => {
       return `id: ${id} from data ${tableName} has been archived successfully`;
+    },
+    unarchiving: (id: string | number, tableName: string) => {
+      return `Unarchiving ${tableName}. id: ${id}`;
+    },
+    unarchiving_success: (id: string | number, tableName: string) => {
+      return `id: ${id} from data ${tableName} has been unarchived successfully`;
     },
     check_password: (userName: string) => {
       return `Checking password for ${userName}...`;

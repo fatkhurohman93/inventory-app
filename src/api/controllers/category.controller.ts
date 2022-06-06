@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 import * as Category from '@services/category.service';
 import { Categories } from '@interfaces/index';
 import { LANG } from '@utils/index';
-import { FindAllParams } from '@interfaces/index';
+import { FindAllParams, ARCHIVING_STATUS } from '@interfaces/index';
 
 export const Create = async (
   req: Request,
@@ -63,7 +63,29 @@ export const Archived = async (
   const { id } = req.params;
   const whoIsAccess = req.headers.userName as string;
 
-  const result = await Category.archived(whoIsAccess, id);
+  const result = await Category.archivedAndUnarchived(
+    whoIsAccess,
+    id,
+    ARCHIVING_STATUS.archived
+  );
+
+  res.status(200).json({ message: LANG.success, data: result });
+};
+
+
+export const Unarchived = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  const whoIsAccess = req.headers.userName as string;
+
+  const result = await Category.archivedAndUnarchived(
+    whoIsAccess,
+    id,
+    ARCHIVING_STATUS.unarchived
+  );
 
   res.status(200).json({ message: LANG.success, data: result });
 };

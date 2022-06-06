@@ -15,8 +15,11 @@ import {
   USER_ATTRIBUTES,
   ID,
   MODEL_NAME,
+  ARCHIVING_STATUS,
 } from '@interfaces/index';
 import { LANG, dateLocal } from '@utils/index';
+import { sequelize } from '@models/index';
+const { and } = sequelize;
 
 const { categories } = models;
 
@@ -57,13 +60,16 @@ export const create = async (data: Categories, whoIsAccess: USERNAME) => {
 
 export const findAll = async (params: FindAllParams) => {
   try {
-    const { page, size, name } = params;
+    const { page, size, name, archived } = params;
     const { limit, offset } = getPagination(page, size);
 
     logger.info(LANG.logger.fetching_categories);
 
     const result = await categories.findAndCountAll({
-      where: filterByName(name),
+      where: and(
+        filterByName(name),
+        archived !== undefined ? { archived } : {}
+      ),
       limit,
       offset,
     });
@@ -140,27 +146,51 @@ export const update = async (
   }
 };
 
-export const archived = async (whoIsAccess: USERNAME, id: ID) => {
+export const archivedAndUnarchived = async (
+  whoIsAccess: USERNAME,
+  id: ID,
+  status: ARCHIVING_STATUS
+) => {
   try {
     const { lastUpdatedTime } = dateLocal();
     const lastUpdatedBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
 
-    logger.info(LANG.logger.archiving(id, MODEL_NAME.user));
+    logger.info(
+      ARCHIVING_STATUS.archived
+        ? LANG.logger.archiving(id, MODEL_NAME.category)
+        : LANG.logger.unarchiving(id, MODEL_NAME.category)
+    );
 
     const result = await categories.update(
-      { archived: true, lastUpdatedTime, lastUpdatedBy },
+      {
+        archived: status === ARCHIVING_STATUS.archived,
+        lastUpdatedTime,
+        lastUpdatedBy,
+      },
       { where: { id } }
     );
 
     if (!result[0]) {
-      throw new BadRequest(LANG.error.failed_to_archived);
+      if (status === ARCHIVING_STATUS.archived)
+        throw new BadRequest(LANG.error.failed_to_archived);
+      throw new BadRequest(LANG.error.failed_to_unarchived);
     }
 
     const ARCHIVED_SUCCESS = LANG.logger.archiving_success(id, MODEL_NAME.user);
+    const UNARCHIVED_SUCCESS = LANG.logger.unarchiving_success(
+      id,
+      MODEL_NAME.user
+    );
 
-    logger.info(ARCHIVED_SUCCESS);
+    if (status === ARCHIVING_STATUS.archived) {
+      logger.info(ARCHIVED_SUCCESS);
 
-    return ARCHIVED_SUCCESS;
+      return ARCHIVED_SUCCESS;
+    } else {
+      logger.info(UNARCHIVED_SUCCESS);
+
+      return UNARCHIVED_SUCCESS;
+    }
   } catch (err) {
     return catchError(err.name, err.message);
   }

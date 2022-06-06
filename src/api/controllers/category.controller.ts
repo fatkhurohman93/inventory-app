@@ -2,6 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 import * as Category from '@services/category.service';
 import { Categories } from '@interfaces/index';
 import { LANG } from '@utils/index';
+import { FindAllParams } from '@interfaces/index';
 
 export const Create = async (
   req: Request,
@@ -21,7 +22,7 @@ export const FindAll = async (
   res: Response,
   next: NextFunction
 ) => {
-  const params = req.body;
+  const params: FindAllParams = req.body;
 
   const result = await Category.findAll(params);
 

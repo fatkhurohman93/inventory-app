@@ -2,13 +2,14 @@ import { Response, Request, NextFunction } from 'express';
 import * as User from '@services/user.service';
 import { Users } from '@interfaces/index';
 import { LANG } from '@utils/index';
+import { FindAllParams } from '@interfaces/index';
 
 export const FindAll = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const params = req.body;
+  const params: FindAllParams = req.body;
 
   const result = await User.findAll(params);
 

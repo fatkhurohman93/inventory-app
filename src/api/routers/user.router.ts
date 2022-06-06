@@ -6,10 +6,16 @@ import {
   FindOne,
   Destroy,
   Archived,
+  Unarchived,
 } from '@controllers/user.controller';
 import { catchAsync } from '@utils/index';
 import { ROUTES, ROUTES_USER } from '@interfaces/index';
-import { verifyToken, isRoot, isUser, isAdmin } from '@api/middlewares/jwt/auth.jwt';
+import {
+  verifyToken,
+  isRoot,
+  isUser,
+  isAdmin,
+} from '@api/middlewares/jwt/auth.jwt';
 
 const router = Router();
 
@@ -28,6 +34,9 @@ export default (app: Router) => {
   router
     .route(ROUTES_USER.archived)
     .put(verifyToken, isAdmin, catchAsync(Archived));
+  router
+    .route(ROUTES_USER.unarchived)
+    .put(verifyToken, isAdmin, catchAsync(Unarchived));
   router
     .route(ROUTES_USER.destroy)
     .delete(verifyToken, isRoot, catchAsync(Destroy));

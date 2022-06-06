@@ -8,3 +8,8 @@ export interface Common {
   lastUpdatedBy: string;
   archived: boolean;
 }
+
+export enum ARCHIVING_STATUS {
+  archived = 'archived',
+  unarchived = 'unarchived',
+}

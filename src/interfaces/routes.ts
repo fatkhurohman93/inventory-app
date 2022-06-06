@@ -8,7 +8,7 @@ export enum ROUTES {
   user = '/user',
   product = '/product',
   category = '/category',
-  supplier = '/supplier ',
+  supplier = '/supplier',
 }
 
 export enum ROUTES_AUTH {
@@ -23,6 +23,7 @@ export enum ROUTES_USER {
   updatePassword = '/update-password',
   archived = '/archived/:userName',
   destroy = '/destroy/:userName',
+  unarchived = '/unarchived/:userName'
 }
 
 export enum ROUTES_CATEGORY {
@@ -31,4 +32,26 @@ export enum ROUTES_CATEGORY {
   findOne = '/findone/:id',
   update = '/update/:id',
   destroy = '/destroy/:id',
+  archived = '/archived/:id',
+  unarchived = '/unarchived/:id',
+}
+
+export enum ROUTES_SUPPLIER {
+  create = '/create',
+  findAll = '/findall',
+  findOne = '/findone/:id',
+  update = '/update/:id',
+  destroy = '/destroy/:id',
+  archived = '/archived/:id',
+  unarchived = '/unarchived/:id',
+}
+
+export enum ROUTES_PRODUCT {
+  create = '/create',
+  findAll = '/findall',
+  findOne = '/findone/:id',
+  update = '/update/:id',
+  destroy = '/destroy/:id',
+  archived = '/archived/:id',
+  unarchived = '/unarchived/:id',
 }

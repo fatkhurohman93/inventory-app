@@ -48,7 +48,7 @@ const ProductsModel = (
       },
       supplierID: {
         type: DataTypes.MEDIUMINT,
-        allowNull: false,
+        allowNull: true,
       },
       ...commonColumn,
     },

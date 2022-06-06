@@ -1,8 +1,21 @@
 import { Response, Request, NextFunction } from 'express';
-import * as User from '@services/user.service';
-import { Users } from '@interfaces/index';
+import * as Supplier from '@services/supplier.service';
+import { Suppliers } from '@interfaces/index';
 import { LANG } from '@utils/index';
 import { FindAllParams, ARCHIVING_STATUS } from '@interfaces/index';
+
+export const Create = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const data = req.body as Suppliers;
+  const whoIsAccess = req.headers.userName as string;
+
+  const result = await Supplier.create(data, whoIsAccess);
+
+  res.status(200).json({ message: LANG.success, data: result });
+};
 
 export const FindAll = async (
   req: Request,
@@ -11,7 +24,7 @@ export const FindAll = async (
 ) => {
   const params: FindAllParams = req.body;
 
-  const result = await User.findAll(params);
+  const result = await Supplier.findAll(params);
 
   res.status(200).json({ message: LANG.success, data: result });
 };
@@ -21,9 +34,9 @@ export const FindOne = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { userName } = req.params;
+  const { id } = req.params;
 
-  const result = await User.findOne(userName);
+  const result = await Supplier.findOne(id);
 
   res.status(200).json({ message: LANG.success, data: result });
 };
@@ -33,23 +46,11 @@ export const Update = async (
   res: Response,
   next: NextFunction
 ) => {
-  const data = req.body as Users;
-  const { userName } = req.params;
+  const data = req.body as Suppliers;
+  const { id } = req.params;
   const whoIsAccess = req.headers.userName as string;
 
-  const result = await User.update(data, whoIsAccess, userName);
-
-  res.status(200).json({ message: LANG.success, data: result });
-};
-
-export const UpdatePassword = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { oldPassword, newPassword, userName }: Users = req.body;
-
-  const result = await User.updatePassword(oldPassword, newPassword, userName);
+  const result = await Supplier.update(data, whoIsAccess, id);
 
   res.status(200).json({ message: LANG.success, data: result });
 };
@@ -59,10 +60,14 @@ export const Archived = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { userName } = req.params;
+  const { id } = req.params;
   const whoIsAccess = req.headers.userName as string;
 
-  const result = await User.archivedAndUnarchived(whoIsAccess, userName, ARCHIVING_STATUS.archived);
+  const result = await Supplier.archivedAndUnarchived(
+    whoIsAccess,
+    id,
+    ARCHIVING_STATUS.archived
+  );
 
   res.status(200).json({ message: LANG.success, data: result });
 };
@@ -72,23 +77,26 @@ export const Unarchived = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { userName } = req.params;
+  const { id } = req.params;
   const whoIsAccess = req.headers.userName as string;
 
-  const result = await User.archivedAndUnarchived(whoIsAccess, userName, ARCHIVING_STATUS.unarchived);
+  const result = await Supplier.archivedAndUnarchived(
+    whoIsAccess,
+    id,
+    ARCHIVING_STATUS.unarchived
+  );
 
   res.status(200).json({ message: LANG.success, data: result });
 };
-
 
 export const Destroy = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { userName } = req.params;
+  const { id } = req.params;
 
-  const result = await User.destroy(userName);
+  const result = await Supplier.destroy(id);
 
   res.status(200).json({ message: LANG.success, data: LANG.deleted(result) });
 };

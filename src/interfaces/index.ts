@@ -5,6 +5,8 @@ export * from './routes';
 export * from './products.interface';
 export * from './categories.interface';
 export * from './suppliers.interface';
+export * from './modelName.interface';
+export * from './common.interface'
 
 export interface IData {
   count: number;

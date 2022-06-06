@@ -5,7 +5,12 @@ import { base64ToImage, catchError } from '@utils/index';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import secret from '../configs/secret.config';
-import { Users, USERNAME, USER_ATTRIBUTES } from '@interfaces/index';
+import {
+  Users,
+  USERNAME,
+  USER_ATTRIBUTES,
+  MODEL_NAME,
+} from '@interfaces/index';
 import { checkPassword } from './user.service';
 import { LANG, dateLocal } from '@utils/index';
 
@@ -30,7 +35,7 @@ export const signUp = async (params: Users, userName?: USERNAME) => {
 
     params.password = bcrypt.hashSync(params.password, 8);
 
-    logger.info(LANG.logger.creating_user);
+    logger.info(LANG.logger.creating(MODEL_NAME.user));
 
     const result = await users.create({
       ...params,
@@ -40,7 +45,7 @@ export const signUp = async (params: Users, userName?: USERNAME) => {
       ...dateParameter,
     });
 
-    logger.info(LANG.logger.success_creating_user(params.userName));
+    logger.info(LANG.logger.created(MODEL_NAME.user, params.userName));
 
     return result;
   } catch (err) {

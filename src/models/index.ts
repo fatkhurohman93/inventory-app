@@ -19,10 +19,10 @@ const models = {
 };
 
 models.products.hasOne(models.categories, {
-  foreignKey: PRODUCT_ATTRIBUTES.categoryID,
+  foreignKey: PRODUCT_ATTRIBUTES.id,
 });
 models.products.hasOne(models.suppliers, {
-  foreignKey: PRODUCT_ATTRIBUTES.supplierID,
+  foreignKey: PRODUCT_ATTRIBUTES.id,
 });
 
 export { sequelize, models };

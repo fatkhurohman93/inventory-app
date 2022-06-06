@@ -41,9 +41,11 @@ export const en = {
     wrong_id: 'Wrong id.',
     password_failed_to_update: 'Password failed to update!',
     no_username_password: 'userName or password cannot be empty!',
-    username_not_found: 'Username not found!',
-    category_not_found: 'Category not found',
+    model_not_found: (tableName: string) => {
+      return `${tableName} not found!`;
+    },
     no_data_updated: 'No data has been updated!',
+    no_data_deleted: 'No data has been deleted!',
     http_not_found: (url: string) => {
       return `Page you are looking ${url} not found`;
     },
@@ -53,33 +55,27 @@ export const en = {
     require_role: (ROLE: string) => {
       return `Require ${ROLE}`;
     },
+    failed_to_archived: 'Failed to archived!',
+    failed_to_unarchived: 'Failed to unarchived!',
   },
   logger: {
-    creating_user: 'Creating user...',
-    success_creating_user: (userName: string) => {
-      return `Username: ${userName} has been created successfully.`;
-    },
     login: (userName: string) => {
       return `Login Username: ${userName}...`;
     },
     success_login: (userName: string) => {
       return `Username: ${userName} login successfully.`;
     },
-    fetching_users: 'Fetching users data...',
-    fetching_user: (userName: string) => {
-      return `Fetching user data by userName: ${userName}...`;
+    archiving: (id: string | number, tableName: string) => {
+      return `Archiving ${tableName}. id: ${id}`;
     },
-    fetch_user_success: (userName: string) => {
-      return `userName: ${userName} has been fetched successfully.`;
+    archiving_success: (id: string | number, tableName: string) => {
+      return `${tableName} with id: ${id} has been archived successfully`;
     },
-    result_get_users: (total: number) => {
-      return `Get ${total} ${total > 1 ? 'users' : 'user'} data.`;
+    unarchiving: (id: string | number, tableName: string) => {
+      return `Unarchiving ${tableName}. id: ${id}`;
     },
-    updating_user: (userName: string) => {
-      return `Updating user data by userName: ${userName}...`;
-    },
-    archiving_user: (userName: string) => {
-      return `Archiving user data by userName: ${userName}...`;
+    unarchiving_success: (id: string | number, tableName: string) => {
+      return `id: ${id} from data ${tableName} has been unarchived successfully`;
     },
     check_password: (userName: string) => {
       return `Checking password for ${userName}...`;
@@ -90,23 +86,29 @@ export const en = {
     authority_granted: (ROLE: string) => {
       return `Authority granted as ${ROLE}`;
     },
-    deleting_user: (userName: string) => {
-      return `Deleting userName: ${userName}...`;
+    deleting: (id: string | number, tableName: string) => {
+      return `Deleting ${tableName} by id: ${id}...`;
     },
-    creating_category: 'Creating category...',
-    category_created: 'Category has been created successfuly.',
-    fetching_categories: 'Fetching categories...',
-    result_get_categories: (total: number) => {
-      return `Get ${total} ${total > 1 ? 'categories' : 'category'} data.`;
+    creating: (tableName: string) => {
+      return `Creating ${tableName}...`;
     },
-    fetching_category: (id: string | number) => {
-      return `Fetching category data by id: ${id}...`;
+    created: (tableName: string, id?: string | number) => {
+      return `${tableName} with id: ${id} has been created successfuly.`;
     },
-    fetch_category_success: (id: ID) => {
-      return `Category id: ${id} has been fetched successfully.`;
+    fetching_all: (tableName: string) => {
+      return `Fetching ${tableName}...`;
     },
-    updating_category: (id: ID) => {
-      return `Updating category data by id: ${id}...`;
+    fetching_one: (id: ID, tableName: string) => {
+      return `Fetching ${tableName} data by id: ${id}...`;
+    },
+    fetching_all_success: (total: Number, tableName: string) => {
+      return `${total} ${tableName}(s) fetched.`;
+    },
+    fetching_one_success: (id: ID, tableName: string) => {
+      return `${tableName} id: ${id} has been fetched successfully.`;
+    },
+    updating: (id: ID, tableName: string) => {
+      return `Updating ${tableName} data by id: ${id}...`;
     },
   },
   folderName: {

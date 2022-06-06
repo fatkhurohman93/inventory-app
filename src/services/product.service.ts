@@ -21,7 +21,7 @@ import { LANG, dateLocal } from '@utils/index';
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
-const { products } = models;
+const { products, suppliers, categories } = models;
 
 export const create = async (data: Products, whoIsAccess: USERNAME) => {
   try {
@@ -35,7 +35,7 @@ export const create = async (data: Products, whoIsAccess: USERNAME) => {
           data.imageName || LANG.no_name,
           LANG.folderName.product
         )
-      : LANG.empty; 
+      : LANG.empty;
 
     const dateParameter = dateLocal();
     const createdBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
@@ -58,7 +58,7 @@ export const create = async (data: Products, whoIsAccess: USERNAME) => {
 
 export const findAll = async (params: FindAllParams) => {
   try {
-    const { page, size, name, archived } = params;
+    const { page, size, name, archived, categoryID, supplierID } = params;
     const { limit, offset } = getPagination(page, size);
 
     logger.info(LANG.logger.fetching_all(MODEL_NAME.product));
@@ -66,8 +66,11 @@ export const findAll = async (params: FindAllParams) => {
     const result = await products.findAndCountAll({
       where: and(
         filterByName(name),
-        archived !== undefined ? { archived } : {}
+        archived !== undefined ? { archived } : {},
+        categoryID ? { categoryID } : {},
+        supplierID ? { supplierID } : {}
       ),
+      include: [{ model: categories }, { model: suppliers }],
       limit,
       offset,
     });
@@ -95,7 +98,10 @@ export const findOne = async (id: ID) => {
 
     logger.info(LANG.logger.fetching_one(id, MODEL_NAME.product));
 
-    const result = await products.findOne({ where: { id } });
+    const result = await products.findOne({
+      where: { id },
+      include: [{ model: categories }, { model: suppliers }],
+    });
 
     if (!result) {
       throw new BadRequest(LANG.error.model_not_found(MODEL_NAME.product));
@@ -109,11 +115,7 @@ export const findOne = async (id: ID) => {
   }
 };
 
-export const update = async (
-  data: Products,
-  whoIsAccess: USERNAME,
-  id: ID
-) => {
+export const update = async (data: Products, whoIsAccess: USERNAME, id: ID) => {
   try {
     if (!id) {
       throw new BadRequest(LANG.error.wrong_id);

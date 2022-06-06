@@ -44,7 +44,7 @@ const ProductsModel = (
       },
       categoryID: {
         type: DataTypes.MEDIUMINT,
-        allowNull: false,
+        allowNull: true,
       },
       supplierID: {
         type: DataTypes.MEDIUMINT,

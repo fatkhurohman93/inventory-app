@@ -6,7 +6,7 @@ export * from './products.interface';
 export * from './categories.interface';
 export * from './suppliers.interface';
 export * from './modelName.interface';
-export * from './common.interface'
+export * from './common.interface';
 
 export interface IData {
   count: number;
@@ -18,6 +18,8 @@ export interface FindAllParams {
   size: number;
   page: number;
   archived?: boolean;
+  categoryID?: number;
+  supplierID?: number;
 }
 
 export type ID = string | number;

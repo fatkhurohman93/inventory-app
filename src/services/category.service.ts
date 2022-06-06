@@ -68,6 +68,7 @@ export const findAll = async (params: FindAllParams) => {
         filterByName(name),
         archived !== undefined ? { archived } : {}
       ),
+      include: [{ model: models.products }],
       limit,
       offset,
     });

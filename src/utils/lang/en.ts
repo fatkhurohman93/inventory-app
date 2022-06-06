@@ -53,6 +53,7 @@ export const en = {
     require_role: (ROLE: string) => {
       return `Require ${ROLE}`;
     },
+    failed_to_archived: 'Failed to archived!',
   },
   logger: {
     creating_user: 'Creating user...',
@@ -78,8 +79,11 @@ export const en = {
     updating_user: (userName: string) => {
       return `Updating user data by userName: ${userName}...`;
     },
-    archiving_user: (userName: string) => {
-      return `Archiving user data by userName: ${userName}...`;
+    archiving: (id: string | number, tableName: string) => {
+      return `Archiving ${tableName}. id: ${id}`;
+    },
+    archiving_success: (id: string | number, tableName: string) => {
+      return `id: ${id} from data ${tableName} has been archived successfully`;
     },
     check_password: (userName: string) => {
       return `Checking password for ${userName}...`;

@@ -31,4 +31,24 @@ export enum ROUTES_CATEGORY {
   findOne = '/findone/:id',
   update = '/update/:id',
   destroy = '/destroy/:id',
+  archived = '/archived/:id',
 }
+
+export enum ROUTES_SUPPLIER {
+  create = '/create',
+  findAll = '/findall',
+  findOne = '/findone/:id',
+  update = '/update/:id',
+  destroy = '/destroy/:id',
+  archived = '/archived/:id',
+}
+
+export enum ROUTES_PRODUCT {
+  create = '/create',
+  findAll = '/findall',
+  findOne = '/findone/:id',
+  update = '/update/:id',
+  destroy = '/destroy/:id',
+  archived = '/archived/:id',
+}
+

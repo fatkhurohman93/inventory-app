@@ -14,6 +14,7 @@ import {
   USERNAME,
   PASSWORD,
   USER_ATTRIBUTES,
+  MODEL_NAME,
 } from '@interfaces/index';
 import bcrypt from 'bcrypt';
 import { LANG, dateLocal } from '@utils/index';
@@ -188,7 +189,7 @@ export const archived = async (whoIsAccess: USERNAME, userName: USERNAME) => {
     const { lastUpdatedTime } = dateLocal();
     const lastUpdatedBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
 
-    logger.info(LANG.logger.archiving_user(userName));
+    logger.info(LANG.logger.archiving(userName, MODEL_NAME.user));
 
     const result = await users.update(
       { archived: true, lastUpdatedTime, lastUpdatedBy },
@@ -199,9 +200,11 @@ export const archived = async (whoIsAccess: USERNAME, userName: USERNAME) => {
       throw new BadRequest(LANG.error.no_data_updated);
     }
 
-    logger.info(LANG.updated(result[0]));
+    const ARCHIVED_SUCCESS = LANG.logger.archiving_success(userName, MODEL_NAME.user)
 
-    return LANG.updated(result[0]);
+    logger.info(ARCHIVED_SUCCESS);
+
+    return ARCHIVED_SUCCESS;
   } catch (err) {
     return catchError(err.name, err.message);
   }

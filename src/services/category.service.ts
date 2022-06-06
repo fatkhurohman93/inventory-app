@@ -14,6 +14,7 @@ import {
   USERNAME,
   USER_ATTRIBUTES,
   ID,
+  MODEL_NAME,
 } from '@interfaces/index';
 import { LANG, dateLocal } from '@utils/index';
 
@@ -134,6 +135,32 @@ export const update = async (
     logger.info(LANG.updated(result[0]));
 
     return LANG.updated(result[0]);
+  } catch (err) {
+    return catchError(err.name, err.message);
+  }
+};
+
+export const archived = async (whoIsAccess: USERNAME, id: ID) => {
+  try {
+    const { lastUpdatedTime } = dateLocal();
+    const lastUpdatedBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
+
+    logger.info(LANG.logger.archiving(id, MODEL_NAME.user));
+
+    const result = await categories.update(
+      { archived: true, lastUpdatedTime, lastUpdatedBy },
+      { where: { id } }
+    );
+
+    if (!result[0]) {
+      throw new BadRequest(LANG.error.failed_to_archived);
+    }
+
+    const ARCHIVED_SUCCESS = LANG.logger.archiving_success(id, MODEL_NAME.user);
+
+    logger.info(ARCHIVED_SUCCESS);
+
+    return ARCHIVED_SUCCESS;
   } catch (err) {
     return catchError(err.name, err.message);
   }

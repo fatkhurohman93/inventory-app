@@ -28,5 +28,11 @@ models.products.belongsTo(models.categories, {
 models.products.belongsTo(models.suppliers, {
   foreignKey: PRODUCT_ATTRIBUTES.supplierID,
 });
+models.categories.hasMany(models.products, {
+  foreignKey: PRODUCT_ATTRIBUTES.id,
+});
+models.suppliers.hasMany(models.products, {
+  foreignKey: PRODUCT_ATTRIBUTES.id,
+});
 
 export { sequelize, models };

@@ -40,16 +40,30 @@ export const FindOne = async (
 
   res.status(200).json({ message: LANG.success, data: result });
 };
+
 export const Update = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const data = req.body as Categories;
-    const { userName } = req.params;
-    const whoIsAccess = req.headers.userName as string
-  
-    const result = await Category.update(data, whoIsAccess, userName);
-  
-    res.status(200).json({ message: LANG.success, data: result });
-  };
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const data = req.body as Categories;
+  const { id } = req.params;
+  const whoIsAccess = req.headers.userName as string;
+
+  const result = await Category.update(data, whoIsAccess, id);
+
+  res.status(200).json({ message: LANG.success, data: result });
+};
+
+export const Archived = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  const whoIsAccess = req.headers.userName as string;
+
+  const result = await Category.archived(whoIsAccess, id);
+
+  res.status(200).json({ message: LANG.success, data: result });
+};

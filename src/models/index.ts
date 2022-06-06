@@ -9,7 +9,11 @@ const sequelize = new Sequelize({
   logging: false,
   dialectOptions: { decimalNumbers: true },
 });
-import { PRODUCT_ATTRIBUTES } from '@interfaces/index';
+import {
+  CATEGORY_ATTRIBUTES,
+  PRODUCT_ATTRIBUTES,
+  SUPPLIER_ATTRIBUTES,
+} from '@interfaces/index';
 
 const models = {
   users: UsersModel(sequelize),
@@ -18,11 +22,11 @@ const models = {
   suppliers: SuppliersModel(sequelize),
 };
 
-models.products.hasOne(models.categories, {
-  foreignKey: PRODUCT_ATTRIBUTES.id,
+models.products.belongsTo(models.categories, {
+  foreignKey: PRODUCT_ATTRIBUTES.categoryID,
 });
-models.products.hasOne(models.suppliers, {
-  foreignKey: PRODUCT_ATTRIBUTES.id,
+models.products.belongsTo(models.suppliers, {
+  foreignKey: PRODUCT_ATTRIBUTES.supplierID,
 });
 
 export { sequelize, models };

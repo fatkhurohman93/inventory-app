@@ -12,9 +12,11 @@ import {
   Users,
   FindAllParams,
   USERNAME,
+  ID,
   PASSWORD,
   USER_ATTRIBUTES,
   MODEL_NAME,
+  ARCHIVING_STATUS,
 } from '@interfaces/index';
 import bcrypt from 'bcrypt';
 import { LANG, dateLocal } from '@utils/index';
@@ -184,27 +186,54 @@ export const updatePassword = async (
   }
 };
 
-export const archived = async (whoIsAccess: USERNAME, userName: USERNAME) => {
+export const archivedAndUnarchived = async (
+  whoIsAccess: USERNAME,
+  userName: ID,
+  status: ARCHIVING_STATUS
+) => {
   try {
     const { lastUpdatedTime } = dateLocal();
     const lastUpdatedBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
 
-    logger.info(LANG.logger.archiving(userName, MODEL_NAME.user));
+    logger.info(
+      ARCHIVING_STATUS.archived
+        ? LANG.logger.archiving(userName, MODEL_NAME.user)
+        : LANG.logger.unarchiving(userName, MODEL_NAME.user)
+    );
 
     const result = await users.update(
-      { archived: true, lastUpdatedTime, lastUpdatedBy },
+      {
+        archived: status === ARCHIVING_STATUS.archived,
+        lastUpdatedTime,
+        lastUpdatedBy,
+      },
       { where: { userName } }
     );
 
     if (!result[0]) {
-      throw new BadRequest(LANG.error.no_data_updated);
+      if (status === ARCHIVING_STATUS.archived)
+        throw new BadRequest(LANG.error.failed_to_archived);
+      throw new BadRequest(LANG.error.failed_to_unarchived);
     }
 
-    const ARCHIVED_SUCCESS = LANG.logger.archiving_success(userName, MODEL_NAME.user)
+    const ARCHIVED_SUCCESS = LANG.logger.archiving_success(
+      userName,
+      MODEL_NAME.user
+    );
+    const UNARCHIVED_SUCCESS = LANG.logger.unarchiving_success(
+      userName,
+      MODEL_NAME.user
+    );
 
-    logger.info(ARCHIVED_SUCCESS);
+    if (status === ARCHIVING_STATUS.archived) {
+      logger.info(ARCHIVED_SUCCESS);
 
-    return ARCHIVED_SUCCESS;
+      return ARCHIVED_SUCCESS;
+    } else {
+      logger.info(UNARCHIVED_SUCCESS);
+
+      return UNARCHIVED_SUCCESS;
+    }
   } catch (err) {
     return catchError(err.name, err.message);
   }

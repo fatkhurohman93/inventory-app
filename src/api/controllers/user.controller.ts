@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 import * as User from '@services/user.service';
 import { Users } from '@interfaces/index';
 import { LANG } from '@utils/index';
-import { FindAllParams } from '@interfaces/index';
+import { FindAllParams, ARCHIVING_STATUS } from '@interfaces/index';
 
 export const FindAll = async (
   req: Request,
@@ -62,10 +62,24 @@ export const Archived = async (
   const { userName } = req.params;
   const whoIsAccess = req.headers.userName as string;
 
-  const result = await User.archived(whoIsAccess, userName);
+  const result = await User.archivedAndUnarchived(whoIsAccess, userName, ARCHIVING_STATUS.archived);
 
   res.status(200).json({ message: LANG.success, data: result });
 };
+
+export const Unarchived = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { userName } = req.params;
+  const whoIsAccess = req.headers.userName as string;
+
+  const result = await User.archivedAndUnarchived(whoIsAccess, userName, ARCHIVING_STATUS.unarchived);
+
+  res.status(200).json({ message: LANG.success, data: result });
+};
+
 
 export const Destroy = async (
   req: Request,

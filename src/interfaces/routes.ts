@@ -23,6 +23,7 @@ export enum ROUTES_USER {
   updatePassword = '/update-password',
   archived = '/archived/:userName',
   destroy = '/destroy/:userName',
+  unarchived = '/unarchived/:userName'
 }
 
 export enum ROUTES_CATEGORY {
@@ -32,6 +33,7 @@ export enum ROUTES_CATEGORY {
   update = '/update/:id',
   destroy = '/destroy/:id',
   archived = '/archived/:id',
+  unarchived = '/unarchived/:id',
 }
 
 export enum ROUTES_SUPPLIER {
@@ -41,6 +43,7 @@ export enum ROUTES_SUPPLIER {
   update = '/update/:id',
   destroy = '/destroy/:id',
   archived = '/archived/:id',
+  unarchived = '/unarchived/:id',
 }
 
 export enum ROUTES_PRODUCT {
@@ -50,5 +53,5 @@ export enum ROUTES_PRODUCT {
   update = '/update/:id',
   destroy = '/destroy/:id',
   archived = '/archived/:id',
+  unarchived = '/unarchived/:id',
 }
-

@@ -5,6 +5,7 @@ import {
   FindOne,
   Update,
   Archived,
+  Unarchived,
 } from '@controllers/category.controller';
 import { catchAsync } from '@utils/index';
 import { ROUTES, ROUTES_CATEGORY } from '@interfaces/index';
@@ -34,4 +35,7 @@ export default (app: Router) => {
   router
     .route(ROUTES_CATEGORY.archived)
     .put(verifyToken, isAdmin, catchAsync(Archived));
+  router
+    .route(ROUTES_CATEGORY.unarchived)
+    .put(verifyToken, isAdmin, catchAsync(Unarchived));
 };

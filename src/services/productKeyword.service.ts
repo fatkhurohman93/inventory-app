@@ -14,24 +14,24 @@ import {
   FindAllParams,
   ID,
   ARCHIVING_STATUS,
-  SalesDetails,
+  ProductKeywords,
 } from '@interfaces/index';
 import { LANG, dateLocal } from '@utils/index';
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
-const { salesDetails, salesMasters } = models;
+const { productKeywords, products } = models;
 
-export const create = async (data: SalesDetails, whoIsAccess: USERNAME) => {
+export const create = async (data: ProductKeywords, whoIsAccess: USERNAME) => {
   try {
     if (!data.name) throw new BadRequest(LANG.error.wrong_parameter);
 
-    logger.info(LANG.logger.creating(MODEL_NAME.sales_detail));
+    logger.info(LANG.logger.creating(MODEL_NAME.product_keyword));
 
     const dateParameter = dateLocal();
     const createdBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
 
-    const result = await salesDetails.create({
+    const result = await productKeywords.create({
       ...data,
       ...dateParameter,
       createdBy,
@@ -39,7 +39,7 @@ export const create = async (data: SalesDetails, whoIsAccess: USERNAME) => {
     });
 
     logger.info(
-      LANG.logger.created(MODEL_NAME.sales_detail, result.toJSON().id)
+      LANG.logger.created(MODEL_NAME.product_keyword, result.toJSON().id)
     );
 
     return result;
@@ -50,19 +50,18 @@ export const create = async (data: SalesDetails, whoIsAccess: USERNAME) => {
 
 export const findAll = async (params: FindAllParams) => {
   try {
-    const { page, size, name, archived, salesMasterID, productID } = params;
+    const { page, size, name, archived, productID } = params;
     const { limit, offset } = getPagination(page, size);
 
-    logger.info(LANG.logger.fetching_all(MODEL_NAME.sales_detail));
+    logger.info(LANG.logger.fetching_all(MODEL_NAME.product_keyword));
 
-    const result = await salesDetails.findAndCountAll({
+    const result = await productKeywords.findAndCountAll({
       where: and(
         filterByName(name),
         archived !== undefined ? { archived } : {},
-        salesMasterID ? { salesMasterID } : {},
         productID ? { productID } : {}
       ),
-      include: [{ model: salesMasters }],
+      include: [{ model: products }],
       limit,
       offset,
     });
@@ -72,7 +71,7 @@ export const findAll = async (params: FindAllParams) => {
     logger.info(
       LANG.logger.fetching_all_success(
         finalResult.totalItems,
-        MODEL_NAME.sales_detail
+        MODEL_NAME.product_keyword
       )
     );
 
@@ -88,18 +87,22 @@ export const findOne = async (id: ID) => {
       throw new BadRequest(LANG.error.wrong_id);
     }
 
-    logger.info(LANG.logger.fetching_one(id, MODEL_NAME.sales_detail));
+    logger.info(LANG.logger.fetching_one(id, MODEL_NAME.product_keyword));
 
-    const result = await salesDetails.findOne({
+    const result = await productKeywords.findOne({
       where: { id },
-      include: [{ model: salesMasters }],
+      include: [{ model: products }],
     });
 
     if (!result) {
-      throw new BadRequest(LANG.error.model_not_found(MODEL_NAME.sales_detail));
+      throw new BadRequest(
+        LANG.error.model_not_found(MODEL_NAME.product_keyword)
+      );
     }
 
-    logger.info(LANG.logger.fetching_one_success(id, MODEL_NAME.sales_detail));
+    logger.info(
+      LANG.logger.fetching_one_success(id, MODEL_NAME.product_keyword)
+    );
 
     return result;
   } catch (err) {
@@ -108,7 +111,7 @@ export const findOne = async (id: ID) => {
 };
 
 export const update = async (
-  data: SalesDetails,
+  data: ProductKeywords,
   whoIsAccess: USERNAME,
   id: ID
 ) => {
@@ -117,12 +120,12 @@ export const update = async (
       throw new BadRequest(LANG.error.wrong_id);
     }
 
-    logger.info(LANG.logger.updating(id, MODEL_NAME.sales_detail));
+    logger.info(LANG.logger.updating(id, MODEL_NAME.product_keyword));
 
     const { lastUpdatedTime } = dateLocal();
     const lastUpdatedBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
 
-    const result = await salesDetails.update(
+    const result = await productKeywords.update(
       { ...data, lastUpdatedBy, lastUpdatedTime },
       { where: { id } }
     );
@@ -150,11 +153,11 @@ export const archivedAndUnarchived = async (
 
     logger.info(
       status === ARCHIVING_STATUS.archived
-        ? LANG.logger.archiving(id, MODEL_NAME.sales_detail)
-        : LANG.logger.unarchiving(id, MODEL_NAME.sales_detail)
+        ? LANG.logger.archiving(id, MODEL_NAME.product_keyword)
+        : LANG.logger.unarchiving(id, MODEL_NAME.product_keyword)
     );
 
-    const result = await salesDetails.update(
+    const result = await productKeywords.update(
       {
         archived: status === ARCHIVING_STATUS.archived,
         lastUpdatedTime,
@@ -171,11 +174,11 @@ export const archivedAndUnarchived = async (
 
     const ARCHIVED_SUCCESS = LANG.logger.archiving_success(
       id,
-      MODEL_NAME.sales_detail
+      MODEL_NAME.product_keyword
     );
     const UNARCHIVED_SUCCESS = LANG.logger.unarchiving_success(
       id,
-      MODEL_NAME.sales_detail
+      MODEL_NAME.product_keyword
     );
 
     const ARCHIVED_OR_UNARCHIVED =
@@ -195,9 +198,9 @@ export const destroy = async (id: ID) => {
   try {
     if (!id) throw new BadRequest(LANG.error.wrong_parameter);
 
-    logger.info(LANG.logger.deleting(id, MODEL_NAME.sales_detail));
+    logger.info(LANG.logger.deleting(id, MODEL_NAME.product_keyword));
 
-    const result = await salesDetails.destroy({ where: { id } });
+    const result = await productKeywords.destroy({ where: { id } });
 
     if (!result) {
       throw new BadRequest(LANG.error.no_data_deleted);

@@ -26,6 +26,7 @@ export interface FindAllParams {
   supplierID?: number;
   paymentModeID?: number;
   salesMasterID?: number;
+  productID?: number;
 }
 
 export type ID = string | number;

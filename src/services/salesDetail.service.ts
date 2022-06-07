@@ -6,6 +6,9 @@ import {
   getPagingData,
   filterByName,
   catchError,
+  LANG,
+  dateLocal,
+  filterAny,
 } from '@utils/index';
 import {
   USERNAME,
@@ -15,12 +18,12 @@ import {
   ID,
   ARCHIVING_STATUS,
   SalesDetails,
+  SELECTED_ATTRIBUTES,
 } from '@interfaces/index';
-import { LANG, dateLocal } from '@utils/index';
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
-const { salesDetails, salesMasters } = models;
+const { salesDetails, salesMasters, products } = models;
 
 export const create = async (data: SalesDetails, whoIsAccess: USERNAME) => {
   try {
@@ -58,11 +61,20 @@ export const findAll = async (params: FindAllParams) => {
     const result = await salesDetails.findAndCountAll({
       where: and(
         filterByName(name),
-        archived !== undefined ? { archived } : {},
-        salesMasterID ? { salesMasterID } : {},
-        productID ? { productID } : {}
+        filterAny({ archived }),
+        filterAny({ salesMasterID }),
+        filterAny({ productID })
       ),
-      include: [{ model: salesMasters }],
+      include: [
+        {
+          model: salesMasters,
+          attributes: SELECTED_ATTRIBUTES.SALES_MASTER,
+        },
+        {
+          model: products,
+          attributes: SELECTED_ATTRIBUTES.PRODUCT,
+        },
+      ],
       limit,
       offset,
     });
@@ -92,7 +104,16 @@ export const findOne = async (id: ID) => {
 
     const result = await salesDetails.findOne({
       where: { id },
-      include: [{ model: salesMasters }],
+      include: [
+        {
+          model: salesMasters,
+          attributes: SELECTED_ATTRIBUTES.SALES_MASTER,
+        },
+        {
+          model: products,
+          attributes: SELECTED_ATTRIBUTES.PRODUCT,
+        },
+      ],
     });
 
     if (!result) {

@@ -5,7 +5,10 @@ import {
   getPagination,
   getPagingData,
   filterByName,
+  filterAny,
   catchError,
+  LANG,
+  dateLocal,
 } from '@utils/index';
 import {
   USERNAME,
@@ -16,7 +19,6 @@ import {
   ARCHIVING_STATUS,
   SalesMasters,
 } from '@interfaces/index';
-import { LANG, dateLocal } from '@utils/index';
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
@@ -34,6 +36,7 @@ export const create = async (data: SalesMasters, whoIsAccess: USERNAME) => {
     const result = await salesMasters.create({
       ...data,
       ...dateParameter,
+      purchasedTime: dateParameter.createdTime,
       createdBy,
       archived: false,
     });
@@ -58,8 +61,8 @@ export const findAll = async (params: FindAllParams) => {
     const result = await salesMasters.findAndCountAll({
       where: and(
         filterByName(name),
-        archived !== undefined ? { archived } : {},
-        paymentModeID ? { paymentModeID } : {}
+        filterAny({ archived }),
+        filterAny({ paymentModeID })
       ),
       include: [{ model: paymentModes }, { model: salesDetails }],
       limit,

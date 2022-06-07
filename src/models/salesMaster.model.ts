@@ -72,6 +72,7 @@ const SalesMastersModel = (
       },
       purchasedStatus: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       purchasedTime: {
         type: DataTypes.DATE,

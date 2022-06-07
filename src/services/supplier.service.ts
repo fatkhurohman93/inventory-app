@@ -5,8 +5,11 @@ import {
   getPagination,
   getPagingData,
   filterByName,
+  filterAny,
   base64ToImage,
   catchError,
+  LANG,
+  dateLocal,
 } from '@utils/index';
 import {
   Suppliers,
@@ -17,7 +20,6 @@ import {
   ID,
   ARCHIVING_STATUS,
 } from '@interfaces/index';
-import { LANG, dateLocal } from '@utils/index';
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
@@ -35,7 +37,7 @@ export const create = async (data: Suppliers, whoIsAccess: USERNAME) => {
           data.imageName || LANG.no_name,
           LANG.folderName.supplier
         )
-      : LANG.empty; 
+      : LANG.empty;
 
     const dateParameter = dateLocal();
     const createdBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
@@ -64,10 +66,7 @@ export const findAll = async (params: FindAllParams) => {
     logger.info(LANG.logger.fetching_all(MODEL_NAME.supplier));
 
     const result = await suppliers.findAndCountAll({
-      where: and(
-        filterByName(name),
-        archived !== undefined ? { archived } : {}
-      ),
+      where: and(filterByName(name), filterAny({ archived })),
       limit,
       offset,
     });

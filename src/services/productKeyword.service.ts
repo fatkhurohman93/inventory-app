@@ -5,7 +5,10 @@ import {
   getPagination,
   getPagingData,
   filterByName,
+  filterAny,
   catchError,
+  LANG,
+  dateLocal,
 } from '@utils/index';
 import {
   USERNAME,
@@ -16,7 +19,6 @@ import {
   ARCHIVING_STATUS,
   ProductKeywords,
 } from '@interfaces/index';
-import { LANG, dateLocal } from '@utils/index';
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
@@ -58,8 +60,8 @@ export const findAll = async (params: FindAllParams) => {
     const result = await productKeywords.findAndCountAll({
       where: and(
         filterByName(name),
-        archived !== undefined ? { archived } : {},
-        productID ? { productID } : {}
+        filterAny({ archived }),
+        filterAny({ productID })
       ),
       include: [{ model: products }],
       limit,

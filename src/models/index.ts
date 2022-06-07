@@ -4,6 +4,7 @@ import ProductsModel from './products.model';
 import CategoriesModel from './categories.model';
 import SuppliersModel from './suppliers.model';
 import PaymentModesModel from './paymentModes.model';
+import SalesMastersModel from './salesMaster.model';
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
@@ -14,6 +15,7 @@ const sequelize = new Sequelize({
 import {
   CATEGORY_ATTRIBUTES,
   PRODUCT_ATTRIBUTES,
+  SALES_MASTER_ATTRIBUTES,
   SUPPLIER_ATTRIBUTES,
   PAYMENT_MODE_ATTRIBUTES,
 } from '@interfaces/index';
@@ -24,6 +26,7 @@ const models = {
   categories: CategoriesModel(sequelize),
   suppliers: SuppliersModel(sequelize),
   paymentModes: PaymentModesModel(sequelize),
+  salesMasters: SalesMastersModel(sequelize),
 };
 
 models.products.belongsTo(models.categories, {
@@ -32,11 +35,8 @@ models.products.belongsTo(models.categories, {
 models.products.belongsTo(models.suppliers, {
   foreignKey: PRODUCT_ATTRIBUTES.supplierID,
 });
-models.categories.hasMany(models.products, {
-  foreignKey: PRODUCT_ATTRIBUTES.id,
-});
-models.suppliers.hasMany(models.products, {
-  foreignKey: PRODUCT_ATTRIBUTES.id,
+models.salesMasters.belongsTo(models.paymentModes, {
+  foreignKey: SALES_MASTER_ATTRIBUTES.paymentModeID,
 });
 
 export { sequelize, models };

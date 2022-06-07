@@ -14,24 +14,24 @@ import {
   FindAllParams,
   ID,
   ARCHIVING_STATUS,
-  PaymentModes,
+  SalesMasters,
 } from '@interfaces/index';
 import { LANG, dateLocal } from '@utils/index';
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
-const { paymentModes, salesMasters } = models;
+const { salesMasters, paymentModes } = models;
 
-export const create = async (data: PaymentModes, whoIsAccess: USERNAME) => {
+export const create = async (data: SalesMasters, whoIsAccess: USERNAME) => {
   try {
     if (!data.name) throw new BadRequest(LANG.error.wrong_parameter);
 
-    logger.info(LANG.logger.creating(MODEL_NAME.payment_mode));
+    logger.info(LANG.logger.creating(MODEL_NAME.sales_master));
 
     const dateParameter = dateLocal();
     const createdBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
 
-    const result = await paymentModes.create({
+    const result = await salesMasters.create({
       ...data,
       ...dateParameter,
       createdBy,
@@ -39,7 +39,7 @@ export const create = async (data: PaymentModes, whoIsAccess: USERNAME) => {
     });
 
     logger.info(
-      LANG.logger.created(MODEL_NAME.payment_mode, result.toJSON().id)
+      LANG.logger.created(MODEL_NAME.sales_master, result.toJSON().id)
     );
 
     return result;
@@ -50,16 +50,18 @@ export const create = async (data: PaymentModes, whoIsAccess: USERNAME) => {
 
 export const findAll = async (params: FindAllParams) => {
   try {
-    const { page, size, name, archived } = params;
+    const { page, size, name, archived, paymentModeID } = params;
     const { limit, offset } = getPagination(page, size);
 
-    logger.info(LANG.logger.fetching_all(MODEL_NAME.payment_mode));
+    logger.info(LANG.logger.fetching_all(MODEL_NAME.sales_master));
 
-    const result = await paymentModes.findAndCountAll({
+    const result = await salesMasters.findAndCountAll({
       where: and(
         filterByName(name),
-        archived !== undefined ? { archived } : {}
+        archived !== undefined ? { archived } : {},
+        paymentModeID ? { paymentModeID } : {}
       ),
+      include: [{ model: paymentModes }],
       limit,
       offset,
     });
@@ -69,7 +71,7 @@ export const findAll = async (params: FindAllParams) => {
     logger.info(
       LANG.logger.fetching_all_success(
         finalResult.totalItems,
-        MODEL_NAME.payment_mode
+        MODEL_NAME.sales_master
       )
     );
 
@@ -85,17 +87,18 @@ export const findOne = async (id: ID) => {
       throw new BadRequest(LANG.error.wrong_id);
     }
 
-    logger.info(LANG.logger.fetching_one(id, MODEL_NAME.payment_mode));
+    logger.info(LANG.logger.fetching_one(id, MODEL_NAME.sales_master));
 
-    const result = await paymentModes.findOne({
+    const result = await salesMasters.findOne({
       where: { id },
+      include: [{ model: paymentModes }],
     });
 
     if (!result) {
-      throw new BadRequest(LANG.error.model_not_found(MODEL_NAME.payment_mode));
+      throw new BadRequest(LANG.error.model_not_found(MODEL_NAME.sales_master));
     }
 
-    logger.info(LANG.logger.fetching_one_success(id, MODEL_NAME.payment_mode));
+    logger.info(LANG.logger.fetching_one_success(id, MODEL_NAME.sales_master));
 
     return result;
   } catch (err) {
@@ -104,7 +107,7 @@ export const findOne = async (id: ID) => {
 };
 
 export const update = async (
-  data: PaymentModes,
+  data: SalesMasters,
   whoIsAccess: USERNAME,
   id: ID
 ) => {
@@ -113,12 +116,12 @@ export const update = async (
       throw new BadRequest(LANG.error.wrong_id);
     }
 
-    logger.info(LANG.logger.updating(id, MODEL_NAME.payment_mode));
+    logger.info(LANG.logger.updating(id, MODEL_NAME.sales_master));
 
     const { lastUpdatedTime } = dateLocal();
     const lastUpdatedBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
 
-    const result = await paymentModes.update(
+    const result = await salesMasters.update(
       { ...data, lastUpdatedBy, lastUpdatedTime },
       { where: { id } }
     );
@@ -146,11 +149,11 @@ export const archivedAndUnarchived = async (
 
     logger.info(
       status === ARCHIVING_STATUS.archived
-        ? LANG.logger.archiving(id, MODEL_NAME.payment_mode)
-        : LANG.logger.unarchiving(id, MODEL_NAME.payment_mode)
+        ? LANG.logger.archiving(id, MODEL_NAME.sales_master)
+        : LANG.logger.unarchiving(id, MODEL_NAME.sales_master)
     );
 
-    const result = await paymentModes.update(
+    const result = await salesMasters.update(
       {
         archived: status === ARCHIVING_STATUS.archived,
         lastUpdatedTime,
@@ -167,11 +170,11 @@ export const archivedAndUnarchived = async (
 
     const ARCHIVED_SUCCESS = LANG.logger.archiving_success(
       id,
-      MODEL_NAME.payment_mode
+      MODEL_NAME.sales_master
     );
     const UNARCHIVED_SUCCESS = LANG.logger.unarchiving_success(
       id,
-      MODEL_NAME.payment_mode
+      MODEL_NAME.sales_master
     );
 
     const ARCHIVED_OR_UNARCHIVED =
@@ -191,9 +194,9 @@ export const destroy = async (id: ID) => {
   try {
     if (!id) throw new BadRequest(LANG.error.wrong_parameter);
 
-    logger.info(LANG.logger.deleting(id, MODEL_NAME.payment_mode));
+    logger.info(LANG.logger.deleting(id, MODEL_NAME.sales_master));
 
-    const result = await paymentModes.destroy({ where: { id } });
+    const result = await salesMasters.destroy({ where: { id } });
 
     if (!result) {
       throw new BadRequest(LANG.error.no_data_deleted);

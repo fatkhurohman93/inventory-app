@@ -8,12 +8,9 @@ import {
   Archived,
   Unarchived,
   Destroy,
-} from '@controllers/paymentMode.controller';
+} from '@controllers/salesMaster.controller';
 import { catchAsync } from '@utils/index';
-import {
-  ROUTES,
-  ROUTES_CRUD,
-} from '@interfaces/index';
+import { ROUTES, ROUTES_CRUD } from '@interfaces/index';
 import {
   verifyToken,
   isRoot,
@@ -24,7 +21,7 @@ import {
 const router = Router();
 
 export default (app: Router) => {
-  app.use(ROUTES.payment_mode, router);
+  app.use(ROUTES.sales_master, router);
   router
     .route(ROUTES_CRUD.create)
     .post(verifyToken, isAdmin, catchAsync(Create));

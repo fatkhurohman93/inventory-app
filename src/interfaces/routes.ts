@@ -23,11 +23,12 @@ export enum ROUTES_USER {
   updatePassword = '/update-password',
   archived = '/archived/:userName',
   destroy = '/destroy/:userName',
-  unarchived = '/unarchived/:userName'
+  unarchived = '/unarchived/:userName',
 }
 
 export enum ROUTES_CATEGORY {
   create = '/create',
+  bulkCreate = '/bulk-create',
   findAll = '/findall',
   findOne = '/findone/:id',
   update = '/update/:id',
@@ -38,6 +39,7 @@ export enum ROUTES_CATEGORY {
 
 export enum ROUTES_SUPPLIER {
   create = '/create',
+  bulkCreate = '/bulk-create',
   findAll = '/findall',
   findOne = '/findone/:id',
   update = '/update/:id',
@@ -48,6 +50,7 @@ export enum ROUTES_SUPPLIER {
 
 export enum ROUTES_PRODUCT {
   create = '/create',
+  bulkCreate = '/bulk-create',
   findAll = '/findall',
   findOne = '/findone/:id',
   update = '/update/:id',

@@ -9,6 +9,7 @@ export enum ROUTES {
   product = '/product',
   category = '/category',
   supplier = '/supplier',
+  payment_mode = '/payment-mode',
 }
 
 export enum ROUTES_AUTH {
@@ -49,6 +50,17 @@ export enum ROUTES_SUPPLIER {
 }
 
 export enum ROUTES_PRODUCT {
+  create = '/create',
+  bulkCreate = '/bulk-create',
+  findAll = '/findall',
+  findOne = '/findone/:id',
+  update = '/update/:id',
+  destroy = '/destroy/:id',
+  archived = '/archived/:id',
+  unarchived = '/unarchived/:id',
+}
+
+export enum ROUTES_PAYMENTMODE {
   create = '/create',
   bulkCreate = '/bulk-create',
   findAll = '/findall',

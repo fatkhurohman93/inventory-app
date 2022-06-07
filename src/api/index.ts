@@ -4,6 +4,7 @@ import User from '@routers/user.router';
 import Category from '@routers/category.router';
 import Supplier from '@routers/supplier.router';
 import Product from '@routers/product.router';
+import PaymentMode from '@routers/paymentMode.router';
 
 export default () => {
   const app = Router();
@@ -13,6 +14,7 @@ export default () => {
   Category(app);
   Supplier(app);
   Product(app);
+  PaymentMode(app);
 
   return app;
 };

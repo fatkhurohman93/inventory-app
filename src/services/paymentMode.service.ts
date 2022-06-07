@@ -22,7 +22,7 @@ import {
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
-const { paymentModes, salesMasters } = models;
+const { paymentModes } = models;
 
 export const create = async (data: PaymentModes, whoIsAccess: USERNAME) => {
   try {

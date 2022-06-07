@@ -21,7 +21,7 @@ import {
 const router = Router();
 
 export default (app: Router) => {
-  app.use(ROUTES.product, router);
+  app.use(ROUTES.product_keyword, router);
   router
     .route(ROUTES_CRUD.create)
     .post(verifyToken, isAdmin, catchAsync(Create));

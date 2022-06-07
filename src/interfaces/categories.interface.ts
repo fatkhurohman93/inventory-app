@@ -1,14 +1,14 @@
 import { Common } from './common.interface';
 
 export interface Categories extends Common {
-  id?: number | string;
-  name: string;
-  description?: string;
-  code: string;
-  image?: string;
-  imageName?: string;
-  productCategoryDiscount: number;
-  productCategoryTax: number;
+  [CATEGORY_ATTRIBUTES.id]?: number | string;
+  [CATEGORY_ATTRIBUTES.name]: string;
+  [CATEGORY_ATTRIBUTES.description]?: string;
+  [CATEGORY_ATTRIBUTES.code]: string;
+  [CATEGORY_ATTRIBUTES.image]?: string;
+  [CATEGORY_ATTRIBUTES.imageName]?: string;
+  [CATEGORY_ATTRIBUTES.productCategoryDiscount]: number;
+  [CATEGORY_ATTRIBUTES.productCategoryTax]: number;
 }
 
 export enum CATEGORY_ATTRIBUTES {
@@ -17,14 +17,7 @@ export enum CATEGORY_ATTRIBUTES {
   description = 'description',
   code = 'code',
   image = 'image',
+  imageName = 'imageName',
   productCategoryDiscount = 'productCategoryDiscount',
   productCategoryTax = 'productCategoryTax',
-  createdTime = 'createdTime',
-  createdDate = 'createdDate',
-  year = 'year',
-  month = 'month',
-  lastUpdatedTime = 'lastUpdatedTime',
-  createdBy = 'createdBy',
-  lastUpdatedBy = 'lastUpdatedBy',
-  archived = 'archived',
 }

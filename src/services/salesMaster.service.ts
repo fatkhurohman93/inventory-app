@@ -5,50 +5,42 @@ import {
   getPagination,
   getPagingData,
   filterByName,
-  base64ToImage,
   catchError,
 } from '@utils/index';
 import {
-  Suppliers,
   USERNAME,
   USER_ATTRIBUTES,
   MODEL_NAME,
   FindAllParams,
   ID,
   ARCHIVING_STATUS,
+  SalesMasters,
 } from '@interfaces/index';
 import { LANG, dateLocal } from '@utils/index';
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
-const { suppliers } = models;
+const { salesMasters, paymentModes, salesDetails } = models;
 
-export const create = async (data: Suppliers, whoIsAccess: USERNAME) => {
+export const create = async (data: SalesMasters, whoIsAccess: USERNAME) => {
   try {
     if (!data.name) throw new BadRequest(LANG.error.wrong_parameter);
 
-    logger.info(LANG.logger.creating(MODEL_NAME.supplier));
-
-    const image = data.image
-      ? base64ToImage(
-          data.image,
-          data.imageName || LANG.no_name,
-          LANG.folderName.supplier
-        )
-      : LANG.empty; 
+    logger.info(LANG.logger.creating(MODEL_NAME.sales_master));
 
     const dateParameter = dateLocal();
     const createdBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
 
-    const result = await suppliers.create({
+    const result = await salesMasters.create({
       ...data,
       ...dateParameter,
-      image,
       createdBy,
       archived: false,
     });
 
-    logger.info(LANG.logger.created(MODEL_NAME.supplier, result.toJSON().id));
+    logger.info(
+      LANG.logger.created(MODEL_NAME.sales_master, result.toJSON().id)
+    );
 
     return result;
   } catch (err) {
@@ -58,16 +50,18 @@ export const create = async (data: Suppliers, whoIsAccess: USERNAME) => {
 
 export const findAll = async (params: FindAllParams) => {
   try {
-    const { page, size, name, archived } = params;
+    const { page, size, name, archived, paymentModeID } = params;
     const { limit, offset } = getPagination(page, size);
 
-    logger.info(LANG.logger.fetching_all(MODEL_NAME.supplier));
+    logger.info(LANG.logger.fetching_all(MODEL_NAME.sales_master));
 
-    const result = await suppliers.findAndCountAll({
+    const result = await salesMasters.findAndCountAll({
       where: and(
         filterByName(name),
-        archived !== undefined ? { archived } : {}
+        archived !== undefined ? { archived } : {},
+        paymentModeID ? { paymentModeID } : {}
       ),
+      include: [{ model: paymentModes }, { model: salesDetails }],
       limit,
       offset,
     });
@@ -77,7 +71,7 @@ export const findAll = async (params: FindAllParams) => {
     logger.info(
       LANG.logger.fetching_all_success(
         finalResult.totalItems,
-        MODEL_NAME.supplier
+        MODEL_NAME.sales_master
       )
     );
 
@@ -93,15 +87,18 @@ export const findOne = async (id: ID) => {
       throw new BadRequest(LANG.error.wrong_id);
     }
 
-    logger.info(LANG.logger.fetching_one(id, MODEL_NAME.supplier));
+    logger.info(LANG.logger.fetching_one(id, MODEL_NAME.sales_master));
 
-    const result = await suppliers.findOne({ where: { id } });
+    const result = await salesMasters.findOne({
+      where: { id },
+      include: [{ model: paymentModes }, { model: salesDetails }],
+    });
 
     if (!result) {
-      throw new BadRequest(LANG.error.model_not_found(MODEL_NAME.supplier));
+      throw new BadRequest(LANG.error.model_not_found(MODEL_NAME.sales_master));
     }
 
-    logger.info(LANG.logger.fetching_one_success(id, MODEL_NAME.supplier));
+    logger.info(LANG.logger.fetching_one_success(id, MODEL_NAME.sales_master));
 
     return result;
   } catch (err) {
@@ -110,7 +107,7 @@ export const findOne = async (id: ID) => {
 };
 
 export const update = async (
-  data: Suppliers,
+  data: SalesMasters,
   whoIsAccess: USERNAME,
   id: ID
 ) => {
@@ -119,21 +116,13 @@ export const update = async (
       throw new BadRequest(LANG.error.wrong_id);
     }
 
-    logger.info(LANG.logger.updating(id, MODEL_NAME.supplier));
+    logger.info(LANG.logger.updating(id, MODEL_NAME.sales_master));
 
     const { lastUpdatedTime } = dateLocal();
     const lastUpdatedBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
 
-    const image = data.image
-      ? base64ToImage(
-          data.image,
-          data.imageName || LANG.no_name,
-          LANG.folderName.user
-        )
-      : LANG.empty;
-
-    const result = await suppliers.update(
-      { ...data, image, lastUpdatedBy, lastUpdatedTime },
+    const result = await salesMasters.update(
+      { ...data, lastUpdatedBy, lastUpdatedTime },
       { where: { id } }
     );
 
@@ -160,11 +149,11 @@ export const archivedAndUnarchived = async (
 
     logger.info(
       status === ARCHIVING_STATUS.archived
-        ? LANG.logger.archiving(id, MODEL_NAME.supplier)
-        : LANG.logger.unarchiving(id, MODEL_NAME.supplier)
+        ? LANG.logger.archiving(id, MODEL_NAME.sales_master)
+        : LANG.logger.unarchiving(id, MODEL_NAME.sales_master)
     );
 
-    const result = await suppliers.update(
+    const result = await salesMasters.update(
       {
         archived: status === ARCHIVING_STATUS.archived,
         lastUpdatedTime,
@@ -181,11 +170,11 @@ export const archivedAndUnarchived = async (
 
     const ARCHIVED_SUCCESS = LANG.logger.archiving_success(
       id,
-      MODEL_NAME.supplier
+      MODEL_NAME.sales_master
     );
     const UNARCHIVED_SUCCESS = LANG.logger.unarchiving_success(
       id,
-      MODEL_NAME.supplier
+      MODEL_NAME.sales_master
     );
 
     const ARCHIVED_OR_UNARCHIVED =
@@ -205,9 +194,9 @@ export const destroy = async (id: ID) => {
   try {
     if (!id) throw new BadRequest(LANG.error.wrong_parameter);
 
-    logger.info(LANG.logger.deleting(id, MODEL_NAME.product));
+    logger.info(LANG.logger.deleting(id, MODEL_NAME.sales_master));
 
-    const result = await suppliers.destroy({ where: { id } });
+    const result = await salesMasters.destroy({ where: { id } });
 
     if (!result) {
       throw new BadRequest(LANG.error.no_data_deleted);

@@ -8,7 +8,7 @@ import {
   Archived,
   Unarchived,
   Destroy,
-} from '@controllers/product.controller';
+} from '@controllers/salesDetail.controller';
 import { catchAsync } from '@utils/index';
 import { ROUTES, ROUTES_CRUD } from '@interfaces/index';
 import {
@@ -21,7 +21,7 @@ import {
 const router = Router();
 
 export default (app: Router) => {
-  app.use(ROUTES.product, router);
+  app.use(ROUTES.sales_detail, router);
   router
     .route(ROUTES_CRUD.create)
     .post(verifyToken, isAdmin, catchAsync(Create));

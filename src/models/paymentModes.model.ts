@@ -4,11 +4,11 @@ import { commonColumn } from './commonColumn';
 
 const { TABLE_NAME } = Interface;
 
-const CategoriesModel = (
+const PaymentModesModel = (
   sequelize: Sequelize
-): ModelCtor<Model<Interface.Categories>> => {
+): ModelCtor<Model<Interface.PaymentModes>> => {
   return sequelize.define(
-    TABLE_NAME.category,
+    TABLE_NAME.payment_mode,
     {
       name: {
         type: DataTypes.STRING('30'),
@@ -16,20 +16,6 @@ const CategoriesModel = (
       },
       description: {
         type: DataTypes.STRING,
-      },
-      code: {
-        type: DataTypes.STRING('10'),
-      },
-      image: {
-        type: DataTypes.STRING,
-      },
-      productCategoryDiscount: {
-        type: DataTypes.FLOAT,
-        defaultValue: 0,
-      },
-      productCategoryTax: {
-        type: DataTypes.FLOAT,
-        defaultValue: 0,
       },
       ...commonColumn,
     },
@@ -40,4 +26,4 @@ const CategoriesModel = (
   );
 };
 
-export default CategoriesModel;
+export default PaymentModesModel;

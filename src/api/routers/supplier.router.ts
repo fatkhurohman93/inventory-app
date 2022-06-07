@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   Create,
+  BulkCreate,
   FindAll,
   FindOne,
   Update,
@@ -9,7 +10,7 @@ import {
   Destroy,
 } from '@controllers/supplier.controller';
 import { catchAsync } from '@utils/index';
-import { ROUTES, ROUTES_SUPPLIER } from '@interfaces/index';
+import { ROUTES, ROUTES_CRUD } from '@interfaces/index';
 import {
   verifyToken,
   isRoot,
@@ -22,24 +23,27 @@ const router = Router();
 export default (app: Router) => {
   app.use(ROUTES.supplier, router);
   router
-    .route(ROUTES_SUPPLIER.create)
+    .route(ROUTES_CRUD.create)
     .post(verifyToken, isAdmin, catchAsync(Create));
   router
-    .route(ROUTES_SUPPLIER.findAll)
+    .route(ROUTES_CRUD.bulkCreate)
+    .post(verifyToken, isAdmin, catchAsync(BulkCreate));
+  router
+    .route(ROUTES_CRUD.findAll)
     .post(verifyToken, isUser, catchAsync(FindAll));
   router
-    .route(ROUTES_SUPPLIER.findOne)
+    .route(ROUTES_CRUD.findOne)
     .post(verifyToken, isUser, catchAsync(FindOne));
   router
-    .route(ROUTES_SUPPLIER.update)
+    .route(ROUTES_CRUD.update)
     .put(verifyToken, isAdmin, catchAsync(Update));
   router
-    .route(ROUTES_SUPPLIER.archived)
+    .route(ROUTES_CRUD.archived)
     .put(verifyToken, isAdmin, catchAsync(Archived));
   router
-    .route(ROUTES_SUPPLIER.unarchived)
+    .route(ROUTES_CRUD.unarchived)
     .put(verifyToken, isAdmin, catchAsync(Unarchived));
   router
-    .route(ROUTES_SUPPLIER.destroy)
+    .route(ROUTES_CRUD.destroy)
     .delete(verifyToken, isRoot, catchAsync(Destroy));
 };

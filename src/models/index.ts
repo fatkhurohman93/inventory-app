@@ -3,6 +3,8 @@ import UsersModel from './users.model';
 import ProductsModel from './products.model';
 import CategoriesModel from './categories.model';
 import SuppliersModel from './suppliers.model';
+import PaymentModesModel from './paymentModes.model';
+
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: './database/database.sqlite',
@@ -13,6 +15,7 @@ import {
   CATEGORY_ATTRIBUTES,
   PRODUCT_ATTRIBUTES,
   SUPPLIER_ATTRIBUTES,
+  PAYMENT_MODE_ATTRIBUTES,
 } from '@interfaces/index';
 
 const models = {
@@ -20,6 +23,7 @@ const models = {
   products: ProductsModel(sequelize),
   categories: CategoriesModel(sequelize),
   suppliers: SuppliersModel(sequelize),
+  paymentModes: PaymentModesModel(sequelize),
 };
 
 models.products.belongsTo(models.categories, {

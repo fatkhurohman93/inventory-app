@@ -7,7 +7,7 @@ Released:
 
 
 Documentation:
-[LINK](https://shorturl.at/lmwUW)
+[LINK](https://bit.ly/3NJ1StT)
 
 
 

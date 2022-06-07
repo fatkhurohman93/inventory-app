@@ -159,7 +159,7 @@ export const archivedAndUnarchived = async (
     const lastUpdatedBy = whoIsAccess || USER_ATTRIBUTES.anonymous;
 
     logger.info(
-      ARCHIVING_STATUS.archived
+      status === ARCHIVING_STATUS.archived
         ? LANG.logger.archiving(id, MODEL_NAME.supplier)
         : LANG.logger.unarchiving(id, MODEL_NAME.supplier)
     );
@@ -188,15 +188,14 @@ export const archivedAndUnarchived = async (
       MODEL_NAME.supplier
     );
 
-    if (status === ARCHIVING_STATUS.archived) {
-      logger.info(ARCHIVED_SUCCESS);
+    const ARCHIVED_OR_UNARCHIVED =
+      status === ARCHIVING_STATUS.archived
+        ? ARCHIVED_SUCCESS
+        : UNARCHIVED_SUCCESS;
 
-      return ARCHIVED_SUCCESS;
-    } else {
-      logger.info(UNARCHIVED_SUCCESS);
+    logger.info(ARCHIVED_OR_UNARCHIVED);
 
-      return UNARCHIVED_SUCCESS;
-    }
+    return ARCHIVED_OR_UNARCHIVED;
   } catch (err) {
     return catchError(err.name, err.message);
   }

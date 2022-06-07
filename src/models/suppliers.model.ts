@@ -2,11 +2,13 @@ import { Sequelize, DataTypes, Model, ModelCtor } from 'sequelize';
 import * as Interface from '@interfaces/index';
 import { commonColumn } from './commonColumn';
 
+const { TABLE_NAME } = Interface;
+
 const SuppliersModel = (
   sequelize: Sequelize
 ): ModelCtor<Model<Interface.Suppliers>> => {
   return sequelize.define(
-    'suppliers',
+    TABLE_NAME.supplier,
     {
       name: {
         type: DataTypes.STRING('30'),

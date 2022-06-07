@@ -6,7 +6,9 @@ export * from './products.interface';
 export * from './categories.interface';
 export * from './suppliers.interface';
 export * from './paymentModes.interface';
-export * from './salesMaster.interface';
+export * from './salesMasters.interface';
+export * from './salesDetails.interface';
+export * from './productKeywords.interface';
 export * from './modelName.interface';
 export * from './common.interface';
 
@@ -23,6 +25,7 @@ export interface FindAllParams {
   categoryID?: number;
   supplierID?: number;
   paymentModeID?: number;
+  salesMasterID?: number;
 }
 
 export type ID = string | number;

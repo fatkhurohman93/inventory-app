@@ -1,16 +1,16 @@
 import { Common } from './common.interface';
 
 export interface Users extends Common {
-  id?: number | string;
-  userName: string;
-  name: string;
-  image?: string;
-  imageName?: string;
-  email: string;
-  password: string;
-  flagRoles: number;
-  oldPassword?: string;
-  newPassword?: string;
+  [USER_ATTRIBUTES.id]?: number | string;
+  [USER_ATTRIBUTES.userName]: string;
+  [USER_ATTRIBUTES.name]: string;
+  [USER_ATTRIBUTES.image]?: string;
+  [USER_ATTRIBUTES.imageName]?: string;
+  [USER_ATTRIBUTES.email]: string;
+  [USER_ATTRIBUTES.password]: string;
+  [USER_ATTRIBUTES.flagRoles]: number;
+  [USER_ATTRIBUTES.oldPassword]?: string;
+  [USER_ATTRIBUTES.newPassword]?: string;
 }
 
 export enum USER_ATTRIBUTES {
@@ -18,16 +18,12 @@ export enum USER_ATTRIBUTES {
   userName = 'userName',
   name = 'name',
   image = 'image',
+  imageName = 'imageName',
   email = 'email',
   password = 'password',
   flagRoles = 'flagRoles',
-  createdTime = 'createdTime',
-  createdDate = 'createdDate',
-  year = 'year',
-  month = 'month',
-  lastUpdatedTime = 'lastUpdatedTime',
-  createdBy = 'createdBy',
-  lastUpdatedBy = 'lastUpdatedBy',
+  oldPassword = 'oldPassword',
+  newPassword = 'newPassword',
   anonymous = 'anonymous',
 }
 

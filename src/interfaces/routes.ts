@@ -12,6 +12,7 @@ export enum ROUTES {
   payment_mode = '/payment-mode',
   sales_master = '/sales-master',
   sales_detail = '/sales-detail',
+  product_keyword = '/product-keyword',
 }
 
 export enum ROUTES_AUTH {

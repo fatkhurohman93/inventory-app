@@ -1,19 +1,19 @@
 import { Common } from './common.interface';
 
 export interface Suppliers extends Common {
-  id?: number | string;
-  name: string;
-  description?: string;
-  code: string;
-  image?: string;
-  imageName?: string;
-  phone: string;
-  whatsapp: string;
-  email: string;
-  facebook: string;
-  instagram: string;
-  twitter: string;
-  address: string;
+  [SUPPLIER_ATTRIBUTES.id]?: number | string;
+  [SUPPLIER_ATTRIBUTES.name]: string;
+  [SUPPLIER_ATTRIBUTES.description]?: string;
+  [SUPPLIER_ATTRIBUTES.code]: string;
+  [SUPPLIER_ATTRIBUTES.image]?: string;
+  [SUPPLIER_ATTRIBUTES.imageName]?: string;
+  [SUPPLIER_ATTRIBUTES.phone]: string;
+  [SUPPLIER_ATTRIBUTES.whatsapp]: string;
+  [SUPPLIER_ATTRIBUTES.email]: string;
+  [SUPPLIER_ATTRIBUTES.facebook]: string;
+  [SUPPLIER_ATTRIBUTES.instagram]: string;
+  [SUPPLIER_ATTRIBUTES.twitter]: string;
+  [SUPPLIER_ATTRIBUTES.address]: string;
 }
 
 export enum SUPPLIER_ATTRIBUTES {
@@ -22,6 +22,7 @@ export enum SUPPLIER_ATTRIBUTES {
   description = 'description',
   code = 'code',
   image = 'image',
+  imageName = 'imageName',
   phone = 'phone',
   whatsapp = 'whatsapp',
   email = 'email',
@@ -29,11 +30,4 @@ export enum SUPPLIER_ATTRIBUTES {
   instagram = 'instagram',
   twitter = 'twitter',
   address = 'address',
-  createdTime = 'createdTime',
-  createdDate = 'createdDate',
-  year = 'year',
-  month = 'month',
-  lastUpdatedTime = 'lastUpdatedTime',
-  createdBy = 'createdBy',
-  lastUpdatedBy = 'lastUpdatedBy',
 }

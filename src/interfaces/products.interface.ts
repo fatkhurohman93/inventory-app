@@ -1,21 +1,21 @@
 import { Common } from './common.interface';
 
 export interface Products extends Common {
-  id?: number | string;
-  name: string;
-  description?: string;
-  code: string;
-  image?: string;
-  imageName?: string;
-  stock: number;
-  unit: string;
-  price: number;
-  sellPrice: number;
-  productDiscount: number;
-  productTax: number;
-  active: boolean;
-  categoryID: number;
-  supplierID: number;
+  [PRODUCT_ATTRIBUTES.id]?: number | string;
+  [PRODUCT_ATTRIBUTES.name]: string;
+  [PRODUCT_ATTRIBUTES.description]?: string;
+  [PRODUCT_ATTRIBUTES.code]: string;
+  [PRODUCT_ATTRIBUTES.image]?: string;
+  [PRODUCT_ATTRIBUTES.imageName]?: string;
+  [PRODUCT_ATTRIBUTES.stock]: number;
+  [PRODUCT_ATTRIBUTES.unit]: string;
+  [PRODUCT_ATTRIBUTES.price]: number;
+  [PRODUCT_ATTRIBUTES.sellPrice]: number;
+  [PRODUCT_ATTRIBUTES.productDiscount]: number;
+  [PRODUCT_ATTRIBUTES.productTax]: number;
+  [PRODUCT_ATTRIBUTES.active]: boolean;
+  [PRODUCT_ATTRIBUTES.categoryID]: number;
+  [PRODUCT_ATTRIBUTES.supplierID]: number;
 }
 
 export enum PRODUCT_ATTRIBUTES {
@@ -24,6 +24,7 @@ export enum PRODUCT_ATTRIBUTES {
   description = 'description',
   code = 'code',
   image = 'image',
+  imageName = 'imageName',
   stock = 'stock',
   unit = 'unit',
   price = 'price',
@@ -33,11 +34,4 @@ export enum PRODUCT_ATTRIBUTES {
   active = 'active',
   categoryID = 'categoryID',
   supplierID = 'supplierID',
-  createdTime = 'createdTime',
-  createdDate = 'createdDate',
-  year = 'year',
-  month = 'month',
-  lastUpdatedTime = 'lastUpdatedTime',
-  createdBy = 'createdBy',
-  lastUpdatedBy = 'lastUpdatedBy',
 }

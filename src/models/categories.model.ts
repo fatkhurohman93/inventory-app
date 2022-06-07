@@ -2,11 +2,13 @@ import { Sequelize, DataTypes, Model, ModelCtor } from 'sequelize';
 import * as Interface from '@interfaces/index';
 import { commonColumn } from './commonColumn';
 
+const { TABLE_NAME } = Interface;
+
 const CategoriesModel = (
   sequelize: Sequelize
 ): ModelCtor<Model<Interface.Categories>> => {
   return sequelize.define(
-    'categories',
+    TABLE_NAME.category,
     {
       name: {
         type: DataTypes.STRING('30'),
@@ -23,9 +25,11 @@ const CategoriesModel = (
       },
       productCategoryDiscount: {
         type: DataTypes.FLOAT,
+        defaultValue: 0,
       },
       productCategoryTax: {
         type: DataTypes.FLOAT,
+        defaultValue: 0,
       },
       ...commonColumn,
     },

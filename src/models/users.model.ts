@@ -1,11 +1,14 @@
 import { Sequelize, DataTypes, Model, ModelCtor } from 'sequelize';
 import * as Interface from '@interfaces/index';
 import { commonColumn } from './commonColumn';
+
+const { TABLE_NAME } = Interface;
+
 const UsersModel = (
   sequelize: Sequelize
 ): ModelCtor<Model<Interface.Users>> => {
   return sequelize.define(
-    'users',
+    TABLE_NAME.user,
     {
       userName: {
         type: DataTypes.STRING('16'),
@@ -23,6 +26,7 @@ const UsersModel = (
       },
       flagRoles: {
         type: DataTypes.INTEGER,
+        defaultValue: 0,
       },
       image: {
         type: DataTypes.STRING,

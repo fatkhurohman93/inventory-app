@@ -4,11 +4,11 @@ import { commonColumn } from './commonColumn';
 
 const { TABLE_NAME } = Interface;
 
-const ProductsModel = (
+const SalesDetailsModel = (
   sequelize: Sequelize
-): ModelCtor<Model<Interface.Products>> => {
+): ModelCtor<Model<Interface.SalesDetails>> => {
   return sequelize.define(
-    TABLE_NAME.product,
+    TABLE_NAME.sales_detail,
     {
       name: {
         type: DataTypes.STRING('30'),
@@ -20,42 +20,41 @@ const ProductsModel = (
       code: {
         type: DataTypes.STRING('10'),
       },
-      image: {
+      transDate: {
+        type: DataTypes.DATE,
+      },
+      salesMasterID: {
+        type: DataTypes.MEDIUMINT,
+        allowNull: true,
+      },
+      productID: {
+        type: DataTypes.MEDIUMINT,
+        allowNull: true,
+      },
+      productName: {
+        type: DataTypes.STRING('20'),
+      },
+      notes: {
         type: DataTypes.STRING,
       },
-      stock: {
-        type: DataTypes.FLOAT,
+      quantity: {
+        type: DataTypes.DECIMAL,
         defaultValue: 0,
       },
       unit: {
-        type: DataTypes.STRING,
-      },
-      price: {
-        type: DataTypes.FLOAT,
-        defaultValue: 0,
+        type: DataTypes.STRING('10'),
       },
       sellPrice: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.DECIMAL,
         defaultValue: 0,
       },
-      productDiscount: {
-        type: DataTypes.FLOAT,
+      discount: {
+        type: DataTypes.DECIMAL,
         defaultValue: 0,
       },
-      productTax: {
-        type: DataTypes.FLOAT,
+      tax: {
+        type: DataTypes.DECIMAL,
         defaultValue: 0,
-      },
-      active: {
-        type: DataTypes.BOOLEAN,
-      },
-      categoryID: {
-        type: DataTypes.MEDIUMINT,
-        allowNull: true,
-      },
-      supplierID: {
-        type: DataTypes.MEDIUMINT,
-        allowNull: true,
       },
       ...commonColumn,
     },
@@ -66,4 +65,4 @@ const ProductsModel = (
   );
 };
 
-export default ProductsModel;
+export default SalesDetailsModel;

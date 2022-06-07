@@ -2,11 +2,13 @@ import { Sequelize, DataTypes, Model, ModelCtor } from 'sequelize';
 import * as Interface from '@interfaces/index';
 import { commonColumn } from './commonColumn';
 
+const { TABLE_NAME } = Interface;
+
 const SalesMastersModel = (
   sequelize: Sequelize
 ): ModelCtor<Model<Interface.SalesMasters>> => {
   return sequelize.define(
-    'salesmaster',
+    TABLE_NAME.sales_master,
     {
       name: {
         type: DataTypes.STRING('30'),
@@ -26,24 +28,31 @@ const SalesMastersModel = (
       },
       subTotal: {
         type: DataTypes.DECIMAL,
+        defaultValue: 0,
       },
       discount: {
         type: DataTypes.DECIMAL,
+        defaultValue: 0,
       },
       tax: {
         type: DataTypes.DECIMAL,
+        defaultValue: 0,
       },
       deliveryFee: {
         type: DataTypes.DECIMAL,
+        defaultValue: 0,
       },
       otherFee: {
         type: DataTypes.DECIMAL,
+        defaultValue: 0,
       },
       otherFee2: {
         type: DataTypes.DECIMAL,
+        defaultValue: 0,
       },
       salesTotal: {
         type: DataTypes.DECIMAL,
+        defaultValue: 0,
       },
       paymentModeID: {
         type: DataTypes.MEDIUMINT,

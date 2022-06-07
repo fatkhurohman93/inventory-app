@@ -17,6 +17,24 @@ export const Create = async (
   res.status(200).json({ message: LANG.success, data: result });
 };
 
+export const BulkCreate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const data = req.body as Categories[];
+  const whoIsAccess = req.headers.userName as string;
+
+  const result = await Promise.all(
+    data.map(async (category: Categories) => {
+      const response = await Category.create(category, whoIsAccess);
+      return response;
+    })
+  );
+
+  res.status(200).json({ message: LANG.success, data: result });
+};
+
 export const FindAll = async (
   req: Request,
   res: Response,

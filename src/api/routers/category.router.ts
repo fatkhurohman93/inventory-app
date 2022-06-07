@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   Create,
+  BulkCreate,
   FindAll,
   FindOne,
   Update,
@@ -24,6 +25,9 @@ export default (app: Router) => {
   router
     .route(ROUTES_CATEGORY.create)
     .post(verifyToken, isAdmin, catchAsync(Create));
+  router
+    .route(ROUTES_CATEGORY.bulkCreate)
+    .post(verifyToken, isAdmin, catchAsync(BulkCreate));
   router
     .route(ROUTES_CATEGORY.findAll)
     .post(verifyToken, isUser, catchAsync(FindAll));

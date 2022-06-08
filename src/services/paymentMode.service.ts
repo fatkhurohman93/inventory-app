@@ -9,6 +9,7 @@ import {
   catchError,
   LANG,
   dateLocal,
+  sortingData,
 } from '@utils/index';
 import {
   USERNAME,
@@ -18,6 +19,7 @@ import {
   ID,
   ARCHIVING_STATUS,
   PaymentModes,
+  OrderBy,
 } from '@interfaces/index';
 import { sequelize } from '@models/index';
 
@@ -52,15 +54,18 @@ export const create = async (data: PaymentModes, whoIsAccess: USERNAME) => {
 
 export const findAll = async (params: FindAllParams) => {
   try {
-    const { page, size, name, archived } = params;
+    const { page, size, name, archived, orderParams } = params;
     const { limit, offset } = getPagination(page, size);
 
     logger.info(LANG.logger.fetching_all(MODEL_NAME.payment_mode));
+
+    const orderBy: OrderBy = sortingData(orderParams);
 
     const result = await paymentModes.findAndCountAll({
       where: and(filterByName(name), filterAny({ archived })),
       limit,
       offset,
+      order: [orderBy],
     });
 
     const finalResult = getPagingData(result, limit, page);

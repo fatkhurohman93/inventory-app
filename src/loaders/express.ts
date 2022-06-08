@@ -8,6 +8,7 @@ import path from 'path';
 import { LANG } from '@utils/index';
 import { whiteList } from '@configs/whitelist.config';
 import { ENVIRONMENT, ROUTES } from '@interfaces/index';
+
 dotenv.config();
 
 export default ({ app }: { app: Application }) => {

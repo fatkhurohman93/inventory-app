@@ -10,6 +10,7 @@ import {
   catchError,
   LANG,
   dateLocal,
+  sortingData,
 } from '@utils/index';
 import {
   Users,
@@ -20,6 +21,7 @@ import {
   USER_ATTRIBUTES,
   MODEL_NAME,
   ARCHIVING_STATUS,
+  OrderBy,
 } from '@interfaces/index';
 import bcrypt from 'bcrypt';
 import { sequelize } from '@models/index';
@@ -29,16 +31,21 @@ const { users } = models;
 
 export const findAll = async (params: FindAllParams) => {
   try {
-    const { page, size, name, archived } = params;
+    const { page, size, name, archived, orderParams } = params;
     const { limit, offset } = getPagination(page, size);
 
     logger.info(LANG.logger.fetching_all(MODEL_NAME.user));
+
+    const orderBy: OrderBy = sortingData(orderParams);
+
+    console.log(orderBy)
 
     const result = await users.findAndCountAll({
       where: and(filterByName(name), filterAny({ archived })),
       attributes: { exclude: [USER_ATTRIBUTES.password] },
       limit,
       offset,
+      order: [orderBy],
     });
 
     const finalResult = getPagingData(result, limit, page);

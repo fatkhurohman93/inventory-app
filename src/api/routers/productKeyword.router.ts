@@ -8,7 +8,7 @@ import {
   Archived,
   Unarchived,
   Destroy,
-} from '@controllers/product.controller';
+} from '@controllers/productKeyword.controller';
 import { catchAsync } from '@utils/index';
 import { ROUTES, ROUTES_CRUD } from '@interfaces/index';
 import {

@@ -10,6 +10,7 @@ import {
   catchError,
   LANG,
   dateLocal,
+  sortingData,
 } from '@utils/index';
 import {
   USERNAME,
@@ -20,6 +21,7 @@ import {
   ARCHIVING_STATUS,
   Products,
   SELECTED_ATTRIBUTES,
+  OrderBy,
 } from '@interfaces/index';
 import { sequelize } from '@models/index';
 
@@ -61,10 +63,13 @@ export const create = async (data: Products, whoIsAccess: USERNAME) => {
 
 export const findAll = async (params: FindAllParams) => {
   try {
-    const { page, size, name, archived, categoryID, supplierID } = params;
+    const { page, size, name, archived, categoryID, supplierID, orderParams } =
+      params;
     const { limit, offset } = getPagination(page, size);
 
     logger.info(LANG.logger.fetching_all(MODEL_NAME.product));
+
+    const orderBy: OrderBy = sortingData(orderParams);
 
     const result = await products.findAndCountAll({
       where: and(
@@ -79,6 +84,7 @@ export const findAll = async (params: FindAllParams) => {
       ],
       limit,
       offset,
+      order: [orderBy],
     });
 
     const finalResult = getPagingData(result, limit, page);

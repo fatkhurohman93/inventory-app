@@ -1,4 +1,7 @@
 import winston from 'winston';
+import dotenv from 'dotenv';
+
+dotenv.config()
 
 const colorsLogger = {
   error: 'white redBG',

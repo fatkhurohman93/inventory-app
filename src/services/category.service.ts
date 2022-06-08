@@ -10,6 +10,7 @@ import {
   catchError,
   LANG,
   dateLocal,
+  sortingData,
 } from '@utils/index';
 import {
   Categories,
@@ -19,6 +20,7 @@ import {
   ID,
   MODEL_NAME,
   ARCHIVING_STATUS,
+  OrderBy,
 } from '@interfaces/index';
 import {} from '@utils/index';
 import { sequelize } from '@models/index';
@@ -61,15 +63,18 @@ export const create = async (data: Categories, whoIsAccess: USERNAME) => {
 
 export const findAll = async (params: FindAllParams) => {
   try {
-    const { page, size, name, archived } = params;
+    const { page, size, name, archived, orderParams } = params;
     const { limit, offset } = getPagination(page, size);
 
     logger.info(LANG.logger.fetching_all(MODEL_NAME.category));
+
+    const orderBy: OrderBy = sortingData(orderParams);
 
     const result = await categories.findAndCountAll({
       where: and(filterByName(name), filterAny({ archived })),
       limit,
       offset,
+      order: [orderBy],
     });
 
     const finalResult = getPagingData(result, limit, page);

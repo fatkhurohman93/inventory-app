@@ -10,3 +10,4 @@ export * from './getPagingData';
 export * from './lang';
 export * from './authorities';
 export * from './dateLocal';
+export * from './sorting';

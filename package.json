@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "akbarpathur",
   "scripts": {
-    "start": "rimraf dist && yarn start:build_nodemon",
+    "start:dev": "rimraf dist && yarn start:build_nodemon",
+    "start:prod": "rimraf dist && yarn build && node dist/index.js",
     "start:build_nodemon": "concurrently --names \"build,nodemon\" \"yarn build --watch\" \"yarn nodemon\"",
     "build": "babel ./src --out-dir dist --extensions \".ts,.tsx,.js,.jsx\"",
     "nodemon": "wait-on dist/index.js && nodemon dist/index.js",

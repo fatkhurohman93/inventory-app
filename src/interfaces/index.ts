@@ -18,6 +18,11 @@ export interface IData {
   rows: object[];
 }
 
+export interface OrderParams {
+  orderOption: string;
+  orderType: string;
+}
+
 export interface FindAllParams {
   name: string;
   size: number;
@@ -28,6 +33,27 @@ export interface FindAllParams {
   paymentModeID?: number;
   salesMasterID?: number;
   productID?: number;
+  orderParams?: OrderParams;
 }
+
+export enum SortingOption {
+  name = 'name',
+  userName = 'userName',
+  stock = 'stock',
+  price = 'price',
+  sellPrice = 'sellPrice',
+  createdTime = 'createdTime',
+  quantity = 'quantity',
+  transDate = 'transDate',
+  subTotal = 'subTotal',
+  salesTotal = 'salesTotal',
+}
+
+export enum SortingType {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
+export type OrderBy = [string, string];
 
 export type ID = string | number;

@@ -7,11 +7,14 @@ import { LANG } from '@utils/index';
 const startServer = async () => {
   const app = express();
   const port = process.env.PORT || 8080;
+  const environment = process.env.ENVIRONMENT;
   await loaders(app);
 
-  app.listen({ port }, () =>
-    logger.info(LANG.setup.server_listen(localIP(), port))
-  );
+  app.listen({ port }, () => {
+    if (environment === 'DEV')
+      logger.info(LANG.setup.server_listen(localIP(), port));
+    else console.log(LANG.setup.server_listen(localIP(), port));
+  });
 };
 
 startServer();

@@ -19,6 +19,7 @@ import {
   ID,
   ARCHIVING_STATUS,
   Products,
+  SELECTED_ATTRIBUTES,
 } from '@interfaces/index';
 import { sequelize } from '@models/index';
 
@@ -72,7 +73,10 @@ export const findAll = async (params: FindAllParams) => {
         filterAny({ categoryID }),
         filterAny({ supplierID })
       ),
-      include: [{ model: categories }, { model: suppliers }],
+      include: [
+        { model: categories, attributes: SELECTED_ATTRIBUTES.CATEGORY },
+        { model: suppliers, attributes: SELECTED_ATTRIBUTES.SUPPLIER },
+      ],
       limit,
       offset,
     });
@@ -102,7 +106,10 @@ export const findOne = async (id: ID) => {
 
     const result = await products.findOne({
       where: { id },
-      include: [{ model: categories }, { model: suppliers }],
+      include: [
+        { model: categories, attributes: SELECTED_ATTRIBUTES.CATEGORY },
+        { model: suppliers, attributes: SELECTED_ATTRIBUTES.SUPPLIER },
+      ],
     });
 
     if (!result) {

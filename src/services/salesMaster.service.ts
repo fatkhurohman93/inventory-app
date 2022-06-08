@@ -18,11 +18,12 @@ import {
   ID,
   ARCHIVING_STATUS,
   SalesMasters,
+  SELECTED_ATTRIBUTES,
 } from '@interfaces/index';
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
-const { salesMasters, paymentModes, salesDetails } = models;
+const { salesMasters, paymentModes, salesDetails, products } = models;
 
 export const create = async (data: SalesMasters, whoIsAccess: USERNAME) => {
   try {
@@ -64,7 +65,16 @@ export const findAll = async (params: FindAllParams) => {
         filterAny({ archived }),
         filterAny({ paymentModeID })
       ),
-      include: [{ model: paymentModes }, { model: salesDetails }],
+      include: [
+        { model: paymentModes, attributes: SELECTED_ATTRIBUTES.PAYMENT_MODE },
+        {
+          model: salesDetails,
+          include: [
+            { model: products, attributes: SELECTED_ATTRIBUTES.PRODUCT },
+          ],
+          attributes: SELECTED_ATTRIBUTES.SALES_DETAIL,
+        },
+      ],
       limit,
       offset,
     });
@@ -94,7 +104,16 @@ export const findOne = async (id: ID) => {
 
     const result = await salesMasters.findOne({
       where: { id },
-      include: [{ model: paymentModes }, { model: salesDetails }],
+      include: [
+        { model: paymentModes, attributes: SELECTED_ATTRIBUTES.PAYMENT_MODE },
+        {
+          model: salesDetails,
+          include: [
+            { model: products, attributes: SELECTED_ATTRIBUTES.PRODUCT },
+          ],
+          attributes: SELECTED_ATTRIBUTES.SALES_DETAIL,
+        },
+      ],
     });
 
     if (!result) {

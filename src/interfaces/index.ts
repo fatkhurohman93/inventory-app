@@ -11,6 +11,7 @@ export * from './salesDetails.interface';
 export * from './productKeywords.interface';
 export * from './modelName.interface';
 export * from './common.interface';
+export * from './selectedAttributes';
 
 export interface IData {
   count: number;

@@ -5,7 +5,10 @@ import {
   getPagination,
   getPagingData,
   filterByName,
+  filterAny,
   catchError,
+  LANG,
+  dateLocal,
 } from '@utils/index';
 import {
   USERNAME,
@@ -16,11 +19,10 @@ import {
   ARCHIVING_STATUS,
   PaymentModes,
 } from '@interfaces/index';
-import { LANG, dateLocal } from '@utils/index';
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
-const { paymentModes, salesMasters } = models;
+const { paymentModes } = models;
 
 export const create = async (data: PaymentModes, whoIsAccess: USERNAME) => {
   try {
@@ -56,10 +58,7 @@ export const findAll = async (params: FindAllParams) => {
     logger.info(LANG.logger.fetching_all(MODEL_NAME.payment_mode));
 
     const result = await paymentModes.findAndCountAll({
-      where: and(
-        filterByName(name),
-        archived !== undefined ? { archived } : {}
-      ),
+      where: and(filterByName(name), filterAny({ archived })),
       limit,
       offset,
     });

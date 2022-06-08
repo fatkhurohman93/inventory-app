@@ -5,8 +5,11 @@ import {
   getPagination,
   getPagingData,
   filterByName,
+  filterAny,
   base64ToImage,
   catchError,
+  LANG,
+  dateLocal,
 } from '@utils/index';
 import {
   Categories,
@@ -17,7 +20,7 @@ import {
   MODEL_NAME,
   ARCHIVING_STATUS,
 } from '@interfaces/index';
-import { LANG, dateLocal } from '@utils/index';
+import {} from '@utils/index';
 import { sequelize } from '@models/index';
 
 const { and } = sequelize;
@@ -64,10 +67,7 @@ export const findAll = async (params: FindAllParams) => {
     logger.info(LANG.logger.fetching_all(MODEL_NAME.category));
 
     const result = await categories.findAndCountAll({
-      where: and(
-        filterByName(name),
-        archived !== undefined ? { archived } : {}
-      ),
+      where: and(filterByName(name), filterAny({ archived })),
       limit,
       offset,
     });

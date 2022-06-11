@@ -38,8 +38,6 @@ export const findAll = async (params: FindAllParams) => {
 
     const orderBy: OrderBy = sortingData(orderParams);
 
-    console.log(orderBy)
-
     const result = await users.findAndCountAll({
       where: and(filterByName(name), filterAny({ archived })),
       attributes: { exclude: [USER_ATTRIBUTES.password] },
